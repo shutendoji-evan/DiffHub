@@ -11,8 +11,8 @@
 		205C3DD01DFCFC2B00059A87 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205C3DCF1DFCFC2B00059A87 /* DataManager.swift */; };
 		20682FEA1DFCEE8A00480495 /* DiffHubConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */; };
 		20682FEC1DFCF32900480495 /* DiffHubPull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20682FEB1DFCF32900480495 /* DiffHubPull.swift */; };
+		20AAB2741DFD2E550062C381 /* PullsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */; };
 		20CEAB471DFCEA3B00EDBBD1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */; };
-		20CEAB491DFCEA3B00EDBBD1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CEAB481DFCEA3B00EDBBD1 /* ViewController.swift */; };
 		20CEAB4C1DFCEA3B00EDBBD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20CEAB4A1DFCEA3B00EDBBD1 /* Main.storyboard */; };
 		20CEAB4E1DFCEA3B00EDBBD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20CEAB4D1DFCEA3B00EDBBD1 /* Assets.xcassets */; };
 		20CEAB511DFCEA3B00EDBBD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 20CEAB4F1DFCEA3B00EDBBD1 /* LaunchScreen.storyboard */; };
@@ -27,9 +27,9 @@
 		205C3DCF1DFCFC2B00059A87 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubConstants.swift; sourceTree = "<group>"; };
 		20682FEB1DFCF32900480495 /* DiffHubPull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubPull.swift; sourceTree = "<group>"; };
+		20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullsTableViewController.swift; sourceTree = "<group>"; };
 		20CEAB431DFCEA3B00EDBBD1 /* DiffHub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DiffHub.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		20CEAB481DFCEA3B00EDBBD1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		20CEAB4B1DFCEA3B00EDBBD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		20CEAB4D1DFCEA3B00EDBBD1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		20CEAB501DFCEA3B00EDBBD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -83,7 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */,
-				20CEAB481DFCEA3B00EDBBD1 /* ViewController.swift */,
+				20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */,
 				20D0FEAC1DFD095F00053940 /* PullRequestInfoTableViewCell.swift */,
 				20D0FEAD1DFD095F00053940 /* PullRequestInfoTableViewCell.xib */,
 				20682FEB1DFCF32900480495 /* DiffHubPull.swift */,
@@ -136,7 +136,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Evan Liang";
 				TargetAttributes = {
 					20CEAB421DFCEA3B00EDBBD1 = {
@@ -231,9 +231,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20AAB2741DFD2E550062C381 /* PullsTableViewController.swift in Sources */,
 				20D0FEB11DFD1A8900053940 /* DiffHubUser.swift in Sources */,
 				20D0FEAE1DFD095F00053940 /* PullRequestInfoTableViewCell.swift in Sources */,
-				20CEAB491DFCEA3B00EDBBD1 /* ViewController.swift in Sources */,
 				205C3DD01DFCFC2B00059A87 /* DataManager.swift in Sources */,
 				20682FEC1DFCF32900480495 /* DiffHubPull.swift in Sources */,
 				20CEAB471DFCEA3B00EDBBD1 /* AppDelegate.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  PullsTableViewController.swift
 //  DiffHub
 //
 //  Created by Hang Liang on 12/10/16.
@@ -12,13 +12,12 @@ import SwiftyJSON
 import RealmSwift
 import Kingfisher
 
-class ViewController: UIViewController {
-
-    @IBOutlet weak var pullRequestsTV: UITableView!
+class PullsTableViewController: UITableViewController {
     
     var pulls : Results<Pull>?
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         self.setupNavBar()
@@ -26,6 +25,10 @@ class ViewController: UIViewController {
         self.getPulls()
         self.setupTV()
         self.updatePullRequestsList()
+        
+        //setup pull refresh
+        self.refreshControl?.addTarget(self, action: #selector(PullsTableViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,31 +43,36 @@ class ViewController: UIViewController {
     func setupTV() {
         //setup pullRequests tableView
         
-        self.pullRequestsTV.rowHeight = UITableViewAutomaticDimension
-        self.pullRequestsTV.estimatedRowHeight = 100
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 100
         
-        self.pullRequestsTV.register(UINib(nibName: "PullRequestInfoTableViewCell", bundle: nil), forCellReuseIdentifier: "requestCell")
+        self.tableView.register(UINib(nibName: "PullRequestInfoTableViewCell", bundle: nil), forCellReuseIdentifier: "requestCell")
+        
+    }
     
+    func handleRefresh(_ refreshControl: UIRefreshControl) {
+        self.updatePullRequestsList()
     }
 
 }
 
-extension ViewController : UITableViewDelegate, UITableViewDataSource {
+
+extension PullsTableViewController {
     
     // pullRequests tableView delegate
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let count = self.pulls?.count else {
             return 0
         }
         return count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "requestCell", for: indexPath) as? PullRequestInfoTableViewCell else {
             return UITableViewCell()
@@ -88,7 +96,7 @@ extension ViewController : UITableViewDelegate, UITableViewDataSource {
             cell.pullDescriptionLabel.text = "#\(pullData.number) opened on \(pullData.creationDate) by \(pullUser.login)"
         }
         else if pullData.state == "close" {
-        
+            
         }
         else {
             cell.pullDescriptionLabel.text = "#\(pullData.number)"
@@ -98,7 +106,7 @@ extension ViewController : UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-extension ViewController {
+extension PullsTableViewController {
     
     //load pulls from realm
     func getPulls() {
@@ -107,7 +115,8 @@ extension ViewController {
             print("failed to fetch pulls")
             return
         }
-        self.pulls = pullResults
+        
+        self.pulls = pullResults.sorted(byProperty: "number", ascending: false)
     }
     
     //update pulls
@@ -176,7 +185,8 @@ extension ViewController {
                     }
                     
                     self.getPulls()
-                    self.pullRequestsTV.reloadData()
+                    self.tableView.reloadData()
+                    self.refreshControl?.endRefreshing()
                     
                 }
                 else {
@@ -186,4 +196,3 @@ extension ViewController {
         
     }
 }
-
