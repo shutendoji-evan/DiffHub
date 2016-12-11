@@ -104,6 +104,32 @@ extension PullsTableViewController {
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        self.performSegue(withIdentifier: "pullListToSplitFile", sender: indexPath)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "pullListToSplitFile" {
+            
+            guard let indexPath = sender as? IndexPath else {
+                return
+            }
+            guard let pullData = self.pulls?[indexPath.item] else {
+                return
+            }
+            
+            guard let splitVC = segue.destination as? SplitFilesChangedViewController else {
+                return
+            }
+            
+            splitVC.pull = pullData
+            
+        }
+    }
 }
 
 extension PullsTableViewController {
@@ -120,7 +146,6 @@ extension PullsTableViewController {
     }
     
     //update pulls
-    
     func updatePullRequestsList() {
         Alamofire.request(DiffHubConstants.pullsURL, method: .get, parameters: nil, encoding: JSONEncoding.default)
             .responseJSON { (response) in
@@ -130,63 +155,12 @@ extension PullsTableViewController {
                         return
                     }
                     
+                    //write into realm
                     let pullsData = JSON(data: data)
-                    
-                    for pull in pullsData {
-                        
-                        let pullRequest = Pull()
-                        
-                        if let id : Int = pull.1["id"].int {
-                            pullRequest.id = id
-                        }
-                        if let number : Int = pull.1["number"].int {
-                            pullRequest.number = number
-                        }
-                        if let url : String = pull.1["url"].string {
-                            pullRequest.url = url
-                        }
-                        if let state : String = pull.1["state"].string {
-                            pullRequest.state = state
-                        }
-                        if let diff_url : String = pull.1["diff_url"].string {
-                            pullRequest.diff_url = diff_url
-                        }
-                        if let title : String = pull.1["title"].string {
-                            pullRequest.title = title
-                        }
-                        if let body : String = pull.1["body"].string {
-                            pullRequest.body = body
-                        }
-                        if let created_at : String = pull.1["created_at"].string {
-                            pullRequest.creationDate = created_at
-                        }
-                        
-                        //user
-                        if let userDict = pull.1["user"].dictionary {
-                            let user = User()
-                            if let login : String = userDict["login"]?.string {
-                                user.login = login
-                            }
-                            if let id : Int = userDict["id"]?.int {
-                                user.id = id
-                            }
-                            if let avatar_url : String = userDict["avatar_url"]?.string {
-                                user.avatar_url = avatar_url
-                            }
-                            
-                            pullRequest.user = user
-                        }
-                        
-                        if !DataManager.sharedInstance.writePull(pull: pullRequest) {
-                            print("write pull: \(pullRequest.number) into realm failed.")
-                            continue
-                        }
-                        
-                    }
-                    
-                    self.getPulls()
-                    self.tableView.reloadData()
-                    self.refreshControl?.endRefreshing()
+                    DataManager.sharedInstance.writePull(pullJSON: pullsData)
+
+                    //finished
+                    self.didUpdatedPullRequests()
                     
                 }
                 else {
@@ -195,4 +169,11 @@ extension PullsTableViewController {
         }
         
     }
+    
+    func didUpdatedPullRequests() {
+        self.getPulls()
+        self.tableView.reloadData()
+        self.refreshControl?.endRefreshing()
+    }
+    
 }

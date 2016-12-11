@@ -9,6 +9,7 @@
 import Foundation
 
 struct DiffHubConstants {
+    
     static var githubAPI = "https://api.github.com"
     static var repos = "repos"
     static var owner = "magicalpanda"
