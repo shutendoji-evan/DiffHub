@@ -12,6 +12,13 @@
 		20310D971DFD6E8100B6C354 /* DiffHubFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20310D961DFD6E8100B6C354 /* DiffHubFile.swift */; };
 		20310D9B1DFDF76C00B6C354 /* RegexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20310D9A1DFDF76C00B6C354 /* RegexParser.swift */; };
 		205C3DD01DFCFC2B00059A87 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205C3DCF1DFCFC2B00059A87 /* DataManager.swift */; };
+		205D89661DFE40AF009D0579 /* PullFileTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205D89651DFE40AF009D0579 /* PullFileTableViewHeaderView.swift */; };
+		205D89681DFE411B009D0579 /* PullFileTableViewHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 205D89671DFE411B009D0579 /* PullFileTableViewHeaderView.xib */; };
+		205D896E1DFE430B009D0579 /* Hack-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 205D896A1DFE430B009D0579 /* Hack-Bold.ttf */; };
+		205D896F1DFE430B009D0579 /* Hack-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 205D896B1DFE430B009D0579 /* Hack-BoldItalic.ttf */; };
+		205D89701DFE430B009D0579 /* Hack-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 205D896C1DFE430B009D0579 /* Hack-Italic.ttf */; };
+		205D89711DFE430B009D0579 /* Hack-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 205D896D1DFE430B009D0579 /* Hack-Regular.ttf */; };
+		205D89731DFE831A009D0579 /* UIColor+GithubColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */; };
 		20682FEA1DFCEE8A00480495 /* DiffHubConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */; };
 		20682FEC1DFCF32900480495 /* DiffHubPull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20682FEB1DFCF32900480495 /* DiffHubPull.swift */; };
 		20AAB2741DFD2E550062C381 /* PullsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */; };
@@ -31,6 +38,13 @@
 		20310D961DFD6E8100B6C354 /* DiffHubFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubFile.swift; sourceTree = "<group>"; };
 		20310D9A1DFDF76C00B6C354 /* RegexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegexParser.swift; sourceTree = "<group>"; };
 		205C3DCF1DFCFC2B00059A87 /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		205D89651DFE40AF009D0579 /* PullFileTableViewHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullFileTableViewHeaderView.swift; sourceTree = "<group>"; };
+		205D89671DFE411B009D0579 /* PullFileTableViewHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PullFileTableViewHeaderView.xib; sourceTree = "<group>"; };
+		205D896A1DFE430B009D0579 /* Hack-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Hack-Bold.ttf"; path = "Font/Hack-Bold.ttf"; sourceTree = "<group>"; };
+		205D896B1DFE430B009D0579 /* Hack-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Hack-BoldItalic.ttf"; path = "Font/Hack-BoldItalic.ttf"; sourceTree = "<group>"; };
+		205D896C1DFE430B009D0579 /* Hack-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Hack-Italic.ttf"; path = "Font/Hack-Italic.ttf"; sourceTree = "<group>"; };
+		205D896D1DFE430B009D0579 /* Hack-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Hack-Regular.ttf"; path = "Font/Hack-Regular.ttf"; sourceTree = "<group>"; };
+		205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+GithubColor.swift"; sourceTree = "<group>"; };
 		20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubConstants.swift; sourceTree = "<group>"; };
 		20682FEB1DFCF32900480495 /* DiffHubPull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubPull.swift; sourceTree = "<group>"; };
 		20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullsTableViewController.swift; sourceTree = "<group>"; };
@@ -67,9 +81,21 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		205D89691DFE42D9009D0579 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				205D896A1DFE430B009D0579 /* Hack-Bold.ttf */,
+				205D896B1DFE430B009D0579 /* Hack-BoldItalic.ttf */,
+				205D896C1DFE430B009D0579 /* Hack-Italic.ttf */,
+				205D896D1DFE430B009D0579 /* Hack-Regular.ttf */,
+			);
+			name = Font;
+			sourceTree = "<group>";
+		};
 		20CEAB3A1DFCEA3B00EDBBD1 = {
 			isa = PBXGroup;
 			children = (
+				205D89691DFE42D9009D0579 /* Font */,
 				20CEAB451DFCEA3B00EDBBD1 /* DiffHub */,
 				20CEAB441DFCEA3B00EDBBD1 /* Products */,
 				1DA5CE418A64F75D68F82CB5 /* Pods */,
@@ -89,11 +115,14 @@
 			isa = PBXGroup;
 			children = (
 				20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */,
+				205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */,
 				20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */,
 				20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */,
 				20D0FEAC1DFD095F00053940 /* PullRequestInfoTableViewCell.swift */,
 				20D0FEAD1DFD095F00053940 /* PullRequestInfoTableViewCell.xib */,
 				20310D941DFD3C1800B6C354 /* SplitFilesChangedViewController.swift */,
+				205D89651DFE40AF009D0579 /* PullFileTableViewHeaderView.swift */,
+				205D89671DFE411B009D0579 /* PullFileTableViewHeaderView.xib */,
 				20682FEB1DFCF32900480495 /* DiffHubPull.swift */,
 				20D0FEB01DFD1A8900053940 /* DiffHubUser.swift */,
 				20310D961DFD6E8100B6C354 /* DiffHubFile.swift */,
@@ -180,8 +209,13 @@
 			files = (
 				20D0FEAF1DFD095F00053940 /* PullRequestInfoTableViewCell.xib in Resources */,
 				20CEAB511DFCEA3B00EDBBD1 /* LaunchScreen.storyboard in Resources */,
+				205D89711DFE430B009D0579 /* Hack-Regular.ttf in Resources */,
+				205D896E1DFE430B009D0579 /* Hack-Bold.ttf in Resources */,
+				205D896F1DFE430B009D0579 /* Hack-BoldItalic.ttf in Resources */,
 				20CEAB4E1DFCEA3B00EDBBD1 /* Assets.xcassets in Resources */,
+				205D89701DFE430B009D0579 /* Hack-Italic.ttf in Resources */,
 				20CEAB4C1DFCEA3B00EDBBD1 /* Main.storyboard in Resources */,
+				205D89681DFE411B009D0579 /* PullFileTableViewHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,9 +280,11 @@
 				20D0FEB11DFD1A8900053940 /* DiffHubUser.swift in Sources */,
 				20D0FEAE1DFD095F00053940 /* PullRequestInfoTableViewCell.swift in Sources */,
 				20310D971DFD6E8100B6C354 /* DiffHubFile.swift in Sources */,
+				205D89661DFE40AF009D0579 /* PullFileTableViewHeaderView.swift in Sources */,
 				205C3DD01DFCFC2B00059A87 /* DataManager.swift in Sources */,
 				20682FEC1DFCF32900480495 /* DiffHubPull.swift in Sources */,
 				20CEAB471DFCEA3B00EDBBD1 /* AppDelegate.swift in Sources */,
+				205D89731DFE831A009D0579 /* UIColor+GithubColor.swift in Sources */,
 				20682FEA1DFCEE8A00480495 /* DiffHubConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

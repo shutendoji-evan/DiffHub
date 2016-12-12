@@ -9,46 +9,49 @@
 import Foundation
 import RealmSwift
 
-class DiffFile: Object {
+class DiffFile {
 
-    dynamic var startIndex : Int = 0
-    dynamic var endIndex : Int = 0
-    dynamic var title : String = ""
-    dynamic var pullRequestId : Int = 0
-    dynamic var id : String = ""
-    dynamic var mode = ""
+    var startIndex : Int = 0
+    var endIndex : Int = 0
+    var title : String = ""
+    var pullRequestId : Int = 0
+    //dynamic var id : String = ""
+    var mode = ""
+    var sourceFileA = ""
+    var sourceFileB = ""
     
-    let sections = List<FileSection>()
+    var sections = Array<FileSection>()
+    var lines = Array<String>()
     
-    func parseSource(sourceStr : String) -> String {
-        
+    func parseSource(sourceStr: String) -> String {
         let sourceStr = sourceStr as NSString
         return sourceStr.substring(with: NSRange(location: self.startIndex, length: self.endIndex))
-        
     }
-    
-    func parseSections(sourceStr : String) {
-        
-    }
-    
-    override static func primaryKey() -> String? {
-        return "id"
-    }
+
+//    override static func primaryKey() -> String? {
+//        return "id"
+//    }
     
 }
 
-class FileSection : Object {
+class FileSection {
     
-    dynamic var startIndex : Int = 0
-    dynamic var endIndex : Int = 0
+    var startIndex : Int = 0
+    var endIndex : Int = 0
     
-    dynamic var title = ""
-    dynamic var id = ""
+    var title = ""
+    var lines = 0
+    var sectionSource = Array<String>()
     
-    //dynamic var oldSection =
-    
-    override static func primaryKey() -> String? {
-        return "id"
+    func parseSource(sourceStr: String) -> String {
+        let sourceStr = sourceStr as NSString
+        return sourceStr.substring(with: NSRange(location: self.startIndex, length: self.endIndex))
     }
+    
+    //dynamic var id = ""
+
+//    override static func primaryKey() -> String? {
+//        return "id"
+//    }
     
 }

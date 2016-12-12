@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "70D40FC649018922FA7AF62F4363AB1C"
-               BuildableName = "SwiftyJSON.framework"
-               BlueprintName = "SwiftyJSON"
+               BlueprintIdentifier = "9B7BEF22A2D2E5C2E4174836475BC47B"
+               BuildableName = "AMScrollingNavbar.framework"
+               BlueprintName = "AMScrollingNavbar"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "70D40FC649018922FA7AF62F4363AB1C"
-            BuildableName = "SwiftyJSON.framework"
-            BlueprintName = "SwiftyJSON"
+            BlueprintIdentifier = "9B7BEF22A2D2E5C2E4174836475BC47B"
+            BuildableName = "AMScrollingNavbar.framework"
+            BlueprintName = "AMScrollingNavbar"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

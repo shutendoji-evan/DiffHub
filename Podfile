@@ -7,6 +7,7 @@ target 'DiffHub' do
     pod 'SwiftyJSON'
     pod 'RealmSwift'
     pod 'Kingfisher', '~> 3.0'   
+    pod 'AMScrollingNavbar'
 end
 
 post_install do |installer|

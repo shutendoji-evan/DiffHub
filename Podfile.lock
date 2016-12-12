@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.2.0)
+  - AMScrollingNavbar (3.0.0)
   - Kingfisher (3.2.2)
   - Realm (2.1.1):
     - Realm/Headers (= 2.1.1)
@@ -10,17 +11,19 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 4.0)
+  - AMScrollingNavbar
   - Kingfisher (~> 3.0)
   - RealmSwift
   - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: aa2e09d871c9160ac53c90e83c68064a94e3dfbe
+  AMScrollingNavbar: aa894c559c80ffa917d0fdc40d8b42be7c6efe15
   Kingfisher: 821466474ad7ffc375a4aecadfa05068cfed67b3
   Realm: a55959c0b171a5fe5267406d17f314fec3cefaae
   RealmSwift: 749fd955bf8d6471c21d218b9389a47aaeccfe3f
   SwiftyJSON: 38a8ea2006779c0fc4c310cb2ee8195327740faf
 
-PODFILE CHECKSUM: ae2185fc3c64462d610309e43affa7cc7823d076
+PODFILE CHECKSUM: bd0218e99e3ba9e3991bb6fb785360135c706185
 
 COCOAPODS: 1.1.1

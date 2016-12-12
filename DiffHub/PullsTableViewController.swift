@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 import RealmSwift
 import Kingfisher
+import AMScrollingNavbar
 
 class PullsTableViewController: UITableViewController {
     
@@ -29,6 +30,13 @@ class PullsTableViewController: UITableViewController {
         //setup pull refresh
         self.refreshControl?.addTarget(self, action: #selector(PullsTableViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let navigationController = navigationController as? ScrollingNavigationController {
+            //navigationController.followScrollView(tableView, delay: 50.0)
+            navigationController.stopFollowingScrollView()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -106,7 +114,7 @@ extension PullsTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         self.performSegue(withIdentifier: "pullListToSplitFile", sender: indexPath)
         
     }
@@ -114,10 +122,14 @@ extension PullsTableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "pullListToSplitFile" {
-            
+
             guard let indexPath = sender as? IndexPath else {
                 return
             }
+            
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            
+            
             guard let pullData = self.pulls?[indexPath.item] else {
                 return
             }

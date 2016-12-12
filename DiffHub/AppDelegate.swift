@@ -44,6 +44,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        
+        if let nc = self.window?.rootViewController as? UINavigationController {
+            if nc.topViewController is SplitFilesChangedViewController {
+                return UIInterfaceOrientationMask.landscape
+            }
+            else {
+                return .all
+            }
+        }
+        return .all
+
+    }
 
 
 }

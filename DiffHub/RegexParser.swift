@@ -29,16 +29,68 @@ extension RegexParser {
         return fileMatches
     }
     
-    func parseSections(fileStr : String) -> [NSTextCheckingResult]? {
+    func parseSections(fileStr: String) -> [NSTextCheckingResult]? {
         let filesPattern = "@@ -\\d*,\\d* \\+\\d*,\\d* @@"
         guard let regex = try? NSRegularExpression(pattern: filesPattern, options: []) else {
-            print("regex files failed")
+            print("regex sections failed")
             return nil
         }
         
         let sectionMatches = regex.matches(in: fileStr, options: [], range: NSRange(location: 0, length: fileStr.characters.count))
         
         return sectionMatches
+    }
+    
+//    func parseMode(fileStr: String) -> String? {
+//        let deletePattern = "diff --git a/.* b/.*\n"
+//        let newPattern = "diff --git a/.* b/.*\n"
+//        let indexPattern = "diff --git a/.* b/.*\n"
+//        
+//        guard let _ = try? NSRegularExpression(pattern: deletePattern, options: []) else {
+//            print("regex mode failed")
+//            return nil
+//        }
+//        
+//        guard let _ = try? NSRegularExpression(pattern: newPattern, options: []) else {
+//            print("regex mode failed")
+//            return nil
+//        }
+//        
+//        guard let _ = try? NSRegularExpression(pattern: indexPattern, options: []) else {
+//            print("regex mode failed")
+//            return nil
+//        }
+//        
+//        return nil
+//    }
+    
+    func parseFileNames(fileStr: String) -> (String, String)? {
+        
+        let fileAParttern = "(?<=(--- a/)).*"
+        let fileBParttern = "(?<=(\\+\\+\\+ b/)).*"
+        
+        guard let regexA = try? NSRegularExpression(pattern: fileAParttern, options: []) else {
+            print("regex parse filename A failed")
+            return nil
+        }
+        guard let regexB = try? NSRegularExpression(pattern: fileBParttern, options: []) else {
+            print("regex parse filename B failed")
+            return nil
+        }
+        
+        let fileStrNS = fileStr as NSString
+        var strA = ""
+        var strB = ""
+        
+        if let fileAMatches = regexA.matches(in: fileStr, options: [], range: NSRange(location: 0, length: fileStr.characters.count)).first  {
+            strA = fileStrNS.substring(with: fileAMatches.range)
+        }
+        if let fileBMatches = regexB.matches(in: fileStr, options: [], range: NSRange(location: 0, length: fileStr.characters.count)).first {
+            strB = fileStrNS.substring(with: fileBMatches.range)
+        }
+        
+        
+        return (strA, strB)
     }
     
 }

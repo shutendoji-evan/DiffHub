@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Scrolling Navigation Controller-->
         <scene sceneID="l3x-5v-RNG">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Och-DU-VVn" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Och-DU-VVn" customClass="ScrollingNavigationController" customModule="AMScrollingNavbar" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="egD-ih-Shw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -64,8 +64,27 @@
                     <view key="view" contentMode="scaleToFill" id="eB8-Wn-SZy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Knq-3g-ZdV">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="3iI-YR-JM6" id="8ps-27-V10"/>
+                                    <outlet property="delegate" destination="3iI-YR-JM6" id="7WR-Od-Ur1"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="N1o-mE-lrR" firstAttribute="top" secondItem="Knq-3g-ZdV" secondAttribute="bottom" id="Dmo-cl-Hqt"/>
+                            <constraint firstItem="Knq-3g-ZdV" firstAttribute="top" secondItem="eB8-Wn-SZy" secondAttribute="top" id="EgT-w4-m5E"/>
+                            <constraint firstItem="Knq-3g-ZdV" firstAttribute="leading" secondItem="eB8-Wn-SZy" secondAttribute="leading" id="Zbp-zL-bBn"/>
+                            <constraint firstAttribute="trailing" secondItem="Knq-3g-ZdV" secondAttribute="trailing" id="fCW-pL-BSc"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="filesTV" destination="Knq-3g-ZdV" id="mal-VQ-0cr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B7N-gM-bH7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

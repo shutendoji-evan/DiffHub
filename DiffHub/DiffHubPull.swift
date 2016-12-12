@@ -22,7 +22,7 @@ class Pull : Object {
     dynamic var updatedDate : String = ""
     
     dynamic var user : User?
-    let files = List<DiffFile>()
+    //let files = List<DiffFile>()
     
     override static func primaryKey() -> String? {
         return "id"

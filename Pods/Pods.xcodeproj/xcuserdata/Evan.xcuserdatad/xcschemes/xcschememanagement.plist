@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>AMScrollingNavbar.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,17 +42,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>077ACDDF9518FF29E1B8E451E9345E89</key>
+		<key>1564425F33CCF88DB6B9E17117902EA8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6A27674D3019DAA95572A929781B99D7</key>
+		<key>64A956E0510AAD643E63117956BA924A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>821CECD1B87554EC62D57F6395D48946</key>
+		<key>70D40FC649018922FA7AF62F4363AB1C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -57,12 +62,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9F760B9559690B3978B24120A9075455</key>
+		<key>9B7BEF22A2D2E5C2E4174836475BC47B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>C4944FEC314D1A66588651D006273ADE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EC11654C1894696B6B490ECD6D1C15F1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
