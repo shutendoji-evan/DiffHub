@@ -22,15 +22,13 @@ class DiffFile {
     
     var sections = Array<FileSection>()
     var lines = Array<String>()
+    var leftLines = Array<String>()
+    var rightLines = Array<String>()
     
     func parseSource(sourceStr: String) -> String {
         let sourceStr = sourceStr as NSString
         return sourceStr.substring(with: NSRange(location: self.startIndex, length: self.endIndex))
     }
-
-//    override static func primaryKey() -> String? {
-//        return "id"
-//    }
     
 }
 
@@ -47,11 +45,5 @@ class FileSection {
         let sourceStr = sourceStr as NSString
         return sourceStr.substring(with: NSRange(location: self.startIndex, length: self.endIndex))
     }
-    
-    //dynamic var id = ""
 
-//    override static func primaryKey() -> String? {
-//        return "id"
-//    }
-    
 }

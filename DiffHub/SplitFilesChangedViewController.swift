@@ -52,6 +52,7 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "BackBtn"), style: .done, target: self, action: #selector(SplitFilesChangedViewController.goBack))
         self.navigationController?.navigationBar.tintColor = UIColor.black
         self.navigationController?.hidesBarsOnSwipe = true
+        
     }
     
     func goBack() {
@@ -60,8 +61,15 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
     
     func setupTV() {
         
+        //header
         let nib = UINib(nibName: "PullFileTableViewHeaderView", bundle: nil)
         self.filesTV.register(nib, forHeaderFooterViewReuseIdentifier: "PullFileTableViewHeaderView")
+        
+        //section title cell
+        self.filesTV.register(UINib(nibName: "SectionTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "sectionTitle")
+        
+        //left-right code cell
+        self.filesTV.register(UINib(nibName: "CodeLineTableViewCell", bundle: nil), forCellReuseIdentifier: "code")
         
         self.filesTV.separatorStyle = .none
 
@@ -150,31 +158,80 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        
-        let cell = UITableViewCell()
-        guard let line = self.files?[indexPath.section].lines else {
-            return cell
+        guard let leftLine = self.files?[indexPath.section].leftLines else {
+            return UITableViewCell()
+        }
+        guard let rightLine = self.files?[indexPath.section].rightLines else {
+            return UITableViewCell()
         }
         
-        let data = line[indexPath.row]
-        if data.characters.first == "@" {
-            cell.backgroundColor = UIColor.getSectionTitleBlueColor()
-        }
-        else if data.characters.first == "-" {
-            cell.backgroundColor = UIColor.getOriFileRedColor()
-        }
-        else if data.characters.first == "+" {
-            cell.backgroundColor = UIColor.getNewFileGreenColor()
-        }
-        else if data.characters.first == " " {
-            cell.backgroundColor = UIColor.white
-        }
-        else {
-            cell.backgroundColor = UIColor.groupTableViewBackground
+        let cell = tableView.dequeueReusableCell(withIdentifier: "code", for: indexPath) as! CodeLineTableViewCell
+        
+        var dataLeft : String?
+        if indexPath.row < leftLine.count {
+            dataLeft = leftLine[indexPath.row]
         }
         
-        cell.textLabel?.text = line[indexPath.row]
-        cell.textLabel?.font = UIFont(name: "Hack-Regular", size: 11)
+        if let leftLine = dataLeft {
+            
+            if leftLine.characters.first == "@" {
+                //section title
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTitle", for: indexPath) as! SectionTitleTableViewCell
+                cell.sectionTitleLabel.text = dataLeft
+                cell.selectionStyle = .none
+                return cell
+            }
+            if leftLine.characters.first == "-" {
+                cell.leftCodeLabel.text = leftLine
+                cell.leftLineNumLabel.text = "0"
+                cell.leftCodeLabel.backgroundColor = UIColor.getOriFileRedColor()
+                cell.leftLineNumLabel.backgroundColor = UIColor.getOriLineNumRedColor()
+            }
+            
+            if leftLine.characters.first == " " {
+                cell.leftCodeLabel.text = leftLine
+                cell.leftLineNumLabel.text = "0"
+                cell.leftLineNumLabel.backgroundColor = UIColor.white
+                cell.leftCodeLabel.backgroundColor = UIColor.white
+            }
+            
+            if leftLine.characters.first == "$" {
+                cell.leftCodeLabel.text = ""
+                cell.leftLineNumLabel.text = ""
+                cell.leftLineNumLabel.backgroundColor = UIColor.groupTableViewBackground
+                cell.leftCodeLabel.backgroundColor = UIColor.groupTableViewBackground
+            }
+        }
+
+        var dataRight : String?
+        if indexPath.row < rightLine.count {
+            dataRight = rightLine[indexPath.row]
+        }
+        if let rightLine = dataRight {
+            if rightLine.characters.first == "+" {
+                cell.rightCodeLabel.text = rightLine
+                cell.rightLineNumLabel.text = "0"
+                cell.rightCodeLabel.backgroundColor = UIColor.getNewFileGreenColor()
+                cell.rightLineNumLabel.backgroundColor = UIColor.getNewLineNumGreenColor()
+            }
+            
+            if rightLine.characters.first == " " {
+                cell.rightCodeLabel.text = dataRight
+                cell.rightLineNumLabel.text = "0"
+                cell.rightLineNumLabel.backgroundColor = UIColor.white
+                cell.rightCodeLabel.backgroundColor = UIColor.white
+            }
+            
+            if rightLine.characters.first == "$" {
+                cell.rightCodeLabel.text = ""
+                cell.rightLineNumLabel.text = ""
+                cell.rightLineNumLabel.backgroundColor = UIColor.groupTableViewBackground
+                cell.rightCodeLabel.backgroundColor = UIColor.groupTableViewBackground
+            }
+
+        }
+        
         cell.selectionStyle = .none
         return cell
     }
@@ -266,16 +323,60 @@ extension SplitFilesChangedViewController {
                 }
                 
                 diffFile.sections.append(fileSection)
-                
             }
             
             self.files?.append(diffFile)
-            //DataManager.sharedInstance.writeDiffFile(diffFile: diffFile)
+            self.seperateLeftAndRight(diffFile: diffFile)
+        }
+
+    }
+    
+    func seperateLeftAndRight(diffFile : DiffFile) {
+        let allLines = diffFile.lines
+        var lineTypeIndicator : Character?
+        var leftLines = Array<String>()
+        var rightLines = Array<String>()
+        
+        for line in allLines {
+            if line.characters.first == "-" || line.characters.first == "+" {
+                if line.characters.first == "-" {
+                    leftLines.append(line)
+                }
+                if line.characters.first == "+" {
+                    rightLines.append(line)
+                }
+                
+                if (lineTypeIndicator == "-" || lineTypeIndicator == "+") && (line.characters.first != lineTypeIndicator) {
+                    //fill the different while switching from (- to +) or (+ to -) append $ let the tableView know it's a empty line
+                    if leftLines.count < rightLines.count {
+                        let num = rightLines.count - leftLines.count
+                        for _ in 0..<num {
+                            leftLines.append("$")
+                        }
+                    }
+                    else if leftLines.count > rightLines.count {
+                        let num = leftLines.count - rightLines.count
+                        for _ in 0..<num {
+                            rightLines.append("$")
+                        }
+                    }
+                    
+                    lineTypeIndicator = line.characters.first
+                }
+
+            }
+            else {
+                leftLines.append(line)
+                rightLines.append(line)
+            }
         }
         
-        //DataManager.sharedInstance.writeFilesIntoPull(pull: pull)
-        self.filesTV.reloadData()
+        diffFile.leftLines = leftLines
+        diffFile.rightLines = rightLines
         
+        
+        
+        self.filesTV.reloadData()
     }
     
 }

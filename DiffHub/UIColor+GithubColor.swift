@@ -22,4 +22,12 @@ extension UIColor {
     class func getSectionTitleBlueColor() -> UIColor {
         return UIColor(red: 244/255, green: 247/255, blue: 251/255, alpha: 1.0)
     }
+    
+    class func getOriLineNumRedColor() -> UIColor {
+        return UIColor(red: 255/255, green: 221/255, blue: 221/255, alpha: 1.0)
+    }
+    
+    class func getNewLineNumGreenColor() -> UIColor {
+        return UIColor(red: 219/255, green: 255/255, blue: 219/255, alpha: 1.0)
+    }
 }
