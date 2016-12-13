@@ -15,25 +15,44 @@ class DiffCodeBlock {
     
     var blockArray = Array<String>()
     
-    func generateMinorBlock() -> Array<String> {
+    var blockMinor : Array<String>?
+    var blockPlus : Array<String>?
+    
+    func generateBlocks() {
+        
+        self.blockMinor = Array<String>()
+        self.blockPlus = Array<String>()
         
         let diffNum = minorNum - plusNum
         
+        for str in blockArray {
+            if str.characters.first == "-" {
+                self.blockMinor?.append(str)
+            }
+            else if str.characters.first == "+" {
+                self.blockPlus?.append(str)
+            }
+        }
+
         if diffNum > 0 {
             //more minor
+            for _ in 0..<diffNum {
+                self.blockPlus?.append("$")
+            }
+            
         }
         else if diffNum < 0 {
             //more plus
+            let diffNum = diffNum * -1
+            for _ in 0..<diffNum {
+                self.blockMinor?.append("$")
+            }
+            
         }
         else {
             //equal
-            
         }
-        
-        return [String]()
+
     }
     
-    func generatePlusBlock() {
-        
-    }
 }

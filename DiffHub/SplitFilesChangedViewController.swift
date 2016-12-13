@@ -108,24 +108,25 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let lines = self.files?[section].lines else {
+        guard let lines = self.files?[section].codeLines else {
             return 0
         }
         return lines.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let line = self.files?[indexPath.section].lines else {
+        guard let lines = self.files?[indexPath.section].codeLines else {
             return 0
         }
-        let data = line[indexPath.row]
-        if data.characters.first == "@" {
+        
+        let type = lines[indexPath.row].type
+        
+        switch type {
+        case .title:
             return 28
-        }
-        else if data.characters.first == "+" || data.characters.first == "-" || data.characters.first == " " {
+        case .plusOrMinor:
             return 18
-        }
-        else {
+        case .common:
             return 18
         }
     }
@@ -163,63 +164,64 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        guard let leftLine = self.files?[indexPath.section].leftLines else {
-            return UITableViewCell()
-        }
-        guard let rightLine = self.files?[indexPath.section].rightLines else {
+        
+        guard let codeLines = self.files?[indexPath.section].codeLines else {
             return UITableViewCell()
         }
         
-        if leftLine[indexPath.row].characters.first == "@" {
+        let codeLine = codeLines[indexPath.row]
+        
+        switch codeLine.type {
+        case .title:
             let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTitle", for: indexPath) as! SectionTitleTableViewCell
-            cell.sectionTitleLabel.text = leftLine[indexPath.row]
+            cell.sectionTitleLabel.text = codeLine.sharedContent
             cell.selectionStyle = .none
+            
+            return cell
+        case .common:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "code", for: indexPath) as! CodeLineTableViewCell
+            cell.leftCodeLabel.text = codeLine.leftContent
+            cell.leftLineNumLabel.text = "0"
+            cell.leftCodeLabel.backgroundColor = UIColor.white
+            cell.leftLineNumLabel.backgroundColor = UIColor.white
+            
+            cell.rightCodeLabel.text = codeLine.rightContent
+            cell.rightLineNumLabel.text = "0"
+            cell.rightCodeLabel.backgroundColor = UIColor.white
+            cell.rightLineNumLabel.backgroundColor = UIColor.white
+            
+            return cell
+        case .plusOrMinor:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "code", for: indexPath) as! CodeLineTableViewCell
+            if codeLine.isLeftNull {
+                cell.leftCodeLabel.text = codeLine.leftContent
+                cell.leftLineNumLabel.text = ""
+                cell.leftCodeLabel.backgroundColor = UIColor.getNoContentGrayColor()
+                cell.leftLineNumLabel.backgroundColor = UIColor.getNoContentGrayColor()
+            }
+            else {
+                cell.leftCodeLabel.text = codeLine.leftContent
+                cell.leftLineNumLabel.text = "0"
+                cell.leftCodeLabel.backgroundColor = UIColor.getOriFileRedColor()
+                cell.leftLineNumLabel.backgroundColor = UIColor.getOriLineNumRedColor()
+            }
+            
+            if codeLine.isRightNull {
+                cell.rightCodeLabel.text = codeLine.rightContent
+                cell.rightLineNumLabel.text = ""
+                cell.rightCodeLabel.backgroundColor = UIColor.getNoContentGrayColor()
+                cell.rightLineNumLabel.backgroundColor = UIColor.getNoContentGrayColor()
+            }
+            else {
+                cell.rightCodeLabel.text = codeLine.rightContent
+                cell.rightLineNumLabel.text = "0"
+                cell.rightCodeLabel.backgroundColor = UIColor.getNewFileGreenColor()
+                cell.rightLineNumLabel.backgroundColor = UIColor.getNewLineNumGreenColor()
+            }
+
             return cell
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "code", for: indexPath) as! CodeLineTableViewCell
-        
-        cell.leftCodeLabel.text = leftLine[indexPath.row]
-        if leftLine[indexPath.row].characters.first == "-" {
-            cell.leftCodeLabel.backgroundColor = UIColor.getOriFileRedColor()
-            cell.leftLineNumLabel.backgroundColor = UIColor.getOriLineNumRedColor()
-            cell.leftLineNumLabel.text = "0"
-        }
-        else if leftLine[indexPath.row].characters.first == "$" {
-            cell.leftLineNumLabel.text = ""
-            cell.leftLineNumLabel.backgroundColor = UIColor.getNoContentGrayColor()
-            cell.leftCodeLabel.text = ""
-            cell.leftCodeLabel.backgroundColor = UIColor.getNoContentGrayColor()
-        }
-        else {
-            cell.leftLineNumLabel.text = "0"
-            cell.leftLineNumLabel.backgroundColor = UIColor.white
-            cell.leftCodeLabel.text = leftLine[indexPath.row]
-            cell.leftCodeLabel.backgroundColor = UIColor.white
-        }
-        
-        cell.rightCodeLabel.text = rightLine[indexPath.row]
-        if rightLine[indexPath.row].characters.first == "+" {
-            cell.rightCodeLabel.backgroundColor = UIColor.getNewFileGreenColor()
-            cell.rightLineNumLabel.backgroundColor = UIColor.getNewLineNumGreenColor()
-            cell.rightLineNumLabel.text = "0"
-        }
-        else if rightLine[indexPath.row].characters.first == "$" {
-            cell.rightLineNumLabel.text = ""
-            cell.rightLineNumLabel.backgroundColor = UIColor.getNoContentGrayColor()
-            cell.rightCodeLabel.text = ""
-            cell.rightCodeLabel.backgroundColor = UIColor.getNoContentGrayColor()
-        }
-        else {
-            cell.rightLineNumLabel.text = "0"
-            cell.rightLineNumLabel.backgroundColor = UIColor.white
-            cell.rightCodeLabel.text = rightLine[indexPath.row]
-            cell.rightCodeLabel.backgroundColor = UIColor.white
-        }
-        
-        cell.selectionStyle = .none
-        return cell
     }
 }
 
@@ -317,8 +319,6 @@ extension SplitFilesChangedViewController {
     
     func seperateLeftAndRight(diffFile : DiffFile) {
         let allLines = diffFile.lines
-        var leftLines = allLines
-        var rightLines = allLines
         
         let organizedArray = NSMutableArray()
         var lastFirstChar : Character?
@@ -335,6 +335,7 @@ extension SplitFilesChangedViewController {
                 }
                 else {
                     //exit groupMode
+                    diffCodeBlock.generateBlocks()
                     organizedArray.add(diffCodeBlock)
                     diffCodeBlock = DiffCodeBlock()
                     
@@ -347,7 +348,7 @@ extension SplitFilesChangedViewController {
             else {
                 
                 if lastFirstChar != "+" && lastFirstChar != "-" {
-                    //info -> groupMode
+                    //enter groupMode
                     diffCodeBlock.blockArray.append(line)
                     if firstChar == "+" {
                         diffCodeBlock.plusNum += 1
@@ -368,34 +369,66 @@ extension SplitFilesChangedViewController {
                         diffCodeBlock.minorNum += 1
                     }
                     lastFirstChar = firstChar
-                    
+
                 }
                 
             }
             
-            if line == allLines.last {
-                if diffCodeBlock.blockArray.count != 0 {
-                    organizedArray.add(diffCodeBlock)
-                }
-            }
         }
         
+        if diffCodeBlock.blockArray.count != 0 {
+            diffCodeBlock.generateBlocks()
+            organizedArray.add(diffCodeBlock)
+            diffCodeBlock = DiffCodeBlock()
+        }
+
+        var codeLines = Array<DiffCodeLine>()
         for item in organizedArray {
-            print(item)
+            if item is DiffCodeBlock {
+                let blockObj = item as! DiffCodeBlock
+                for i in 0..<blockObj.blockMinor!.count {
+                    let codeLine = DiffCodeLine()
+                    codeLine.type = .plusOrMinor
+                    
+                    if blockObj.blockMinor![i].characters.first == "$" {
+                        codeLine.leftContent = ""
+                        codeLine.isLeftNull = true
+                    }
+                    else {
+                        codeLine.leftContent = blockObj.blockMinor![i]
+                    }
+                    if blockObj.blockPlus![i].characters.first == "$" {
+                        codeLine.rightContent = ""
+                        codeLine.isRightNull = true
+                    }
+                    else {
+                        codeLine.rightContent = blockObj.blockPlus![i]
+                    }
+                    
+                    codeLines.append(codeLine)
+                }
+
+            }
+            else {
+                let str = item as! String
+                let codeLine = DiffCodeLine()
+                
+                let type : DiffCodeLine.CodeLineType = str.characters.first == "@" ? .title : .common
+                codeLine.type = type
+                
+                if type == .title {
+                    codeLine.sharedContent = str
+                }
+                else if type == .common {
+                    codeLine.leftContent = str
+                    codeLine.rightContent = str
+                }
+                
+                codeLines.append(codeLine)
+            }
         }
         
-        for (index, line) in leftLines.enumerated() {
-            if line.characters.first == "+" {
-                leftLines[index] = "$"
-            }
-            
-            if line.characters.first == "-" {
-                rightLines[index] = "$"
-            }
-        }
-        
-        diffFile.leftLines = leftLines
-        diffFile.rightLines = rightLines
+        diffFile.codeLines = codeLines
         
         self.filesTV.reloadData()
     }

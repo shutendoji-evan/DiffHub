@@ -28,4 +28,7 @@ class DiffCodeLine {
     
     var sharedContent = ""
     
+    var isLeftNull = false
+    var isRightNull = false
+    
 }

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import RealmSwift
 
 class DiffFile {
 
@@ -15,15 +14,13 @@ class DiffFile {
     var endIndex : Int = 0
     var title : String = ""
     var pullRequestId : Int = 0
-    //dynamic var id : String = ""
     var mode = ""
     var sourceFileA = ""
     var sourceFileB = ""
     
     var sections = Array<FileSection>()
     var lines = Array<String>()
-    var leftLines = Array<String>()
-    var rightLines = Array<String>()
+    var codeLines = Array<DiffCodeLine>()
     
     func parseSource(sourceStr: String) -> String {
         let sourceStr = sourceStr as NSString
