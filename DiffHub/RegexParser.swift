@@ -30,7 +30,7 @@ extension RegexParser {
     }
     
     func parseSections(fileStr: String) -> [NSTextCheckingResult]? {
-        let filesPattern = "@@ -\\d*,\\d* \\+\\d*,\\d* @@"
+        let filesPattern = "@@ -\\d*,\\d* \\+\\d*,\\d* @@.*\n"
         guard let regex = try? NSRegularExpression(pattern: filesPattern, options: []) else {
             print("regex sections failed")
             return nil

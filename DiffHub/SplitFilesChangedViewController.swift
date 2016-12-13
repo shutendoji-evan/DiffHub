@@ -53,6 +53,12 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
         self.navigationController?.navigationBar.tintColor = UIColor.black
         self.navigationController?.hidesBarsOnSwipe = true
         
+        guard let pull = self.pull else {
+            return
+        }
+        
+        self.navigationItem.title = "#" + String(pull.number)
+        
     }
     
     func goBack() {
@@ -165,71 +171,51 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
             return UITableViewCell()
         }
         
+        if leftLine[indexPath.row].characters.first == "@" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTitle", for: indexPath) as! SectionTitleTableViewCell
+            cell.sectionTitleLabel.text = leftLine[indexPath.row]
+            cell.selectionStyle = .none
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "code", for: indexPath) as! CodeLineTableViewCell
         
-        var dataLeft : String?
-        if indexPath.row < leftLine.count {
-            dataLeft = leftLine[indexPath.row]
+        cell.leftCodeLabel.text = leftLine[indexPath.row]
+        if leftLine[indexPath.row].characters.first == "-" {
+            cell.leftCodeLabel.backgroundColor = UIColor.getOriFileRedColor()
+            cell.leftLineNumLabel.backgroundColor = UIColor.getOriLineNumRedColor()
+            cell.leftLineNumLabel.text = "0"
+        }
+        else if leftLine[indexPath.row].characters.first == "$" {
+            cell.leftLineNumLabel.text = ""
+            cell.leftLineNumLabel.backgroundColor = UIColor.getNoContentGrayColor()
+            cell.leftCodeLabel.text = ""
+            cell.leftCodeLabel.backgroundColor = UIColor.getNoContentGrayColor()
+        }
+        else {
+            cell.leftLineNumLabel.text = "0"
+            cell.leftLineNumLabel.backgroundColor = UIColor.white
+            cell.leftCodeLabel.text = leftLine[indexPath.row]
+            cell.leftCodeLabel.backgroundColor = UIColor.white
         }
         
-        if let leftLine = dataLeft {
-            
-            if leftLine.characters.first == "@" {
-                //section title
-                
-                let cell = tableView.dequeueReusableCell(withIdentifier: "sectionTitle", for: indexPath) as! SectionTitleTableViewCell
-                cell.sectionTitleLabel.text = dataLeft
-                cell.selectionStyle = .none
-                return cell
-            }
-            if leftLine.characters.first == "-" {
-                cell.leftCodeLabel.text = leftLine
-                cell.leftLineNumLabel.text = "0"
-                cell.leftCodeLabel.backgroundColor = UIColor.getOriFileRedColor()
-                cell.leftLineNumLabel.backgroundColor = UIColor.getOriLineNumRedColor()
-            }
-            
-            if leftLine.characters.first == " " {
-                cell.leftCodeLabel.text = leftLine
-                cell.leftLineNumLabel.text = "0"
-                cell.leftLineNumLabel.backgroundColor = UIColor.white
-                cell.leftCodeLabel.backgroundColor = UIColor.white
-            }
-            
-            if leftLine.characters.first == "$" {
-                cell.leftCodeLabel.text = ""
-                cell.leftLineNumLabel.text = ""
-                cell.leftLineNumLabel.backgroundColor = UIColor.groupTableViewBackground
-                cell.leftCodeLabel.backgroundColor = UIColor.groupTableViewBackground
-            }
+        cell.rightCodeLabel.text = rightLine[indexPath.row]
+        if rightLine[indexPath.row].characters.first == "+" {
+            cell.rightCodeLabel.backgroundColor = UIColor.getNewFileGreenColor()
+            cell.rightLineNumLabel.backgroundColor = UIColor.getNewLineNumGreenColor()
+            cell.rightLineNumLabel.text = "0"
         }
-
-        var dataRight : String?
-        if indexPath.row < rightLine.count {
-            dataRight = rightLine[indexPath.row]
+        else if rightLine[indexPath.row].characters.first == "$" {
+            cell.rightLineNumLabel.text = ""
+            cell.rightLineNumLabel.backgroundColor = UIColor.getNoContentGrayColor()
+            cell.rightCodeLabel.text = ""
+            cell.rightCodeLabel.backgroundColor = UIColor.getNoContentGrayColor()
         }
-        if let rightLine = dataRight {
-            if rightLine.characters.first == "+" {
-                cell.rightCodeLabel.text = rightLine
-                cell.rightLineNumLabel.text = "0"
-                cell.rightCodeLabel.backgroundColor = UIColor.getNewFileGreenColor()
-                cell.rightLineNumLabel.backgroundColor = UIColor.getNewLineNumGreenColor()
-            }
-            
-            if rightLine.characters.first == " " {
-                cell.rightCodeLabel.text = dataRight
-                cell.rightLineNumLabel.text = "0"
-                cell.rightLineNumLabel.backgroundColor = UIColor.white
-                cell.rightCodeLabel.backgroundColor = UIColor.white
-            }
-            
-            if rightLine.characters.first == "$" {
-                cell.rightCodeLabel.text = ""
-                cell.rightLineNumLabel.text = ""
-                cell.rightLineNumLabel.backgroundColor = UIColor.groupTableViewBackground
-                cell.rightCodeLabel.backgroundColor = UIColor.groupTableViewBackground
-            }
-
+        else {
+            cell.rightLineNumLabel.text = "0"
+            cell.rightLineNumLabel.backgroundColor = UIColor.white
+            cell.rightCodeLabel.text = rightLine[indexPath.row]
+            cell.rightCodeLabel.backgroundColor = UIColor.white
         }
         
         cell.selectionStyle = .none
@@ -252,7 +238,7 @@ extension SplitFilesChangedViewController {
         Alamofire.request(diff_url, method: .get, parameters: nil, encoding: JSONEncoding.default)
             .responseString { (response) in
                 if response.result.isSuccess {
-                    print(response.data!)
+                    //print(response.data!)
                     if let data = response.data {
                         guard let diffString = String(data: data, encoding: .utf8) else {
                             print("parse diff string failed.")
@@ -265,7 +251,6 @@ extension SplitFilesChangedViewController {
                             return
                         }
                         self.generateFiles(diffStrNS: diffStrNS, checkResults: checkResults)
-                        
                     }
                     
                 }
@@ -292,7 +277,6 @@ extension SplitFilesChangedViewController {
             diffFile.endIndex = lastIndex
             diffFile.title = diffStrNS.substring(with: file.range) as String
             diffFile.pullRequestId = pull.id
-            //diffFile.id = String(pull.id) + "|" + diffFile.title //unique id
             
             //names
             let fileStr = diffFile.parseSource(sourceStr: diffStrNS as String)
@@ -317,7 +301,7 @@ extension SplitFilesChangedViewController {
                 fileSection.endIndex = lastIndex
                 let resultNS = fileSection.parseSource(sourceStr: fileStr) as NSString
                 fileSection.sectionSource = resultNS.components(separatedBy: "\n")
-                
+
                 for line in fileSection.sectionSource {
                     diffFile.lines.append(line)
                 }
@@ -333,48 +317,85 @@ extension SplitFilesChangedViewController {
     
     func seperateLeftAndRight(diffFile : DiffFile) {
         let allLines = diffFile.lines
-        var lineTypeIndicator : Character?
-        var leftLines = Array<String>()
-        var rightLines = Array<String>()
+        var leftLines = allLines
+        var rightLines = allLines
         
-        for line in allLines {
-            if line.characters.first == "-" || line.characters.first == "+" {
-                if line.characters.first == "-" {
-                    leftLines.append(line)
+        let organizedArray = NSMutableArray()
+        var lastFirstChar : Character?
+        var diffCodeBlock = DiffCodeBlock()
+        
+        for (_, line) in allLines.enumerated() {
+            let firstChar = line.characters.first
+            
+            if firstChar != "+" && firstChar != "-" {
+                if lastFirstChar != "+" && lastFirstChar != "-" {
+                    //plain info
+                    organizedArray.add(line)
+                    lastFirstChar = firstChar
                 }
-                if line.characters.first == "+" {
-                    rightLines.append(line)
-                }
-                
-                if (lineTypeIndicator == "-" || lineTypeIndicator == "+") && (line.characters.first != lineTypeIndicator) {
-                    //fill the different while switching from (- to +) or (+ to -) append $ let the tableView know it's a empty line
-                    if leftLines.count < rightLines.count {
-                        let num = rightLines.count - leftLines.count
-                        for _ in 0..<num {
-                            leftLines.append("$")
-                        }
-                    }
-                    else if leftLines.count > rightLines.count {
-                        let num = leftLines.count - rightLines.count
-                        for _ in 0..<num {
-                            rightLines.append("$")
-                        }
-                    }
+                else {
+                    //exit groupMode
+                    organizedArray.add(diffCodeBlock)
+                    diffCodeBlock = DiffCodeBlock()
                     
-                    lineTypeIndicator = line.characters.first
+                    organizedArray.add(line)
+                    lastFirstChar = firstChar
+                    continue
                 }
 
             }
             else {
-                leftLines.append(line)
-                rightLines.append(line)
+                
+                if lastFirstChar != "+" && lastFirstChar != "-" {
+                    //info -> groupMode
+                    diffCodeBlock.blockArray.append(line)
+                    if firstChar == "+" {
+                        diffCodeBlock.plusNum += 1
+                    }
+                    else if firstChar == "-" {
+                        diffCodeBlock.minorNum += 1
+                    }
+                    lastFirstChar = firstChar
+                    
+                }
+                else {
+                    //inside groupMode
+                    diffCodeBlock.blockArray.append(line)
+                    if firstChar == "+" {
+                        diffCodeBlock.plusNum += 1
+                    }
+                    else if firstChar == "-" {
+                        diffCodeBlock.minorNum += 1
+                    }
+                    lastFirstChar = firstChar
+                    
+                }
+                
+            }
+            
+            if line == allLines.last {
+                if diffCodeBlock.blockArray.count != 0 {
+                    organizedArray.add(diffCodeBlock)
+                }
+            }
+        }
+        
+        for item in organizedArray {
+            print(item)
+        }
+        
+        for (index, line) in leftLines.enumerated() {
+            if line.characters.first == "+" {
+                leftLines[index] = "$"
+            }
+            
+            if line.characters.first == "-" {
+                rightLines[index] = "$"
             }
         }
         
         diffFile.leftLines = leftLines
         diffFile.rightLines = rightLines
-        
-        
         
         self.filesTV.reloadData()
     }

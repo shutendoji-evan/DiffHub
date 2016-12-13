@@ -97,33 +97,4 @@ class DataManager {
 
     }
     
-//    func writeFilesIntoPull(pull: Pull) {
-//        guard let realm = self.getRealm() else {
-//            return
-//        }
-//        do {
-//            try realm.write {
-//                let files = realm.objects(DiffFile.self).filter("pullRequestId = \(pull.id)")
-//                pull.files.append(objectsIn: files)
-//                
-//            }
-//            
-//        } catch {
-//            print("write files into: #\(pull.number) failed.")
-//        }
-//    }
-//    
-//    func writeDiffFile(diffFile: DiffFile) {
-//        guard let realm = self.getRealm() else {
-//            return
-//        }
-//        do {
-//            try realm.write {
-//                realm.add(diffFile, update: true)
-//            }
-//        } catch {
-//            print("write diffFile failed")
-//            return
-//        }
-//    }
 }

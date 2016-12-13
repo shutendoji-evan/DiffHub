@@ -30,4 +30,8 @@ extension UIColor {
     class func getNewLineNumGreenColor() -> UIColor {
         return UIColor(red: 219/255, green: 255/255, blue: 219/255, alpha: 1.0)
     }
+    
+    class func getNoContentGrayColor() -> UIColor {
+        return UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
+    }
 }
