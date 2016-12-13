@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DiffHub/SplitFilesChangedViewController.swift"
-            timestampString = "503293159.384495"
+            timestampString = "503295673.105724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
             landmarkName = "generateFiles(diffStrNS:checkResults:)"
             landmarkType = "7">
          </BreakpointContent>

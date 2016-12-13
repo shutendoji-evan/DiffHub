@@ -18,6 +18,17 @@ class DiffCodeBlock {
     var blockMinor : Array<String>?
     var blockPlus : Array<String>?
     
+    func append(line: String) {
+        let firstChar = line.characters.first
+        if firstChar == "+" {
+            self.plusNum += 1
+        }
+        else if firstChar == "-" {
+            self.minorNum += 1
+        }
+        self.blockArray.append(line)
+    }
+    
     func generateBlocks() {
         
         self.blockMinor = Array<String>()

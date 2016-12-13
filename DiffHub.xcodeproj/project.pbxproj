@@ -23,6 +23,7 @@
 		205D89771DFE8F82009D0579 /* CodeLineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 205D89751DFE8F82009D0579 /* CodeLineTableViewCell.xib */; };
 		205D897A1DFE9287009D0579 /* SectionTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205D89781DFE9287009D0579 /* SectionTitleTableViewCell.swift */; };
 		205D897B1DFE9287009D0579 /* SectionTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 205D89791DFE9287009D0579 /* SectionTitleTableViewCell.xib */; };
+		205D897D1DFFBBFC009D0579 /* TopAlignedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205D897C1DFFBBFC009D0579 /* TopAlignedLabel.swift */; };
 		20682FEA1DFCEE8A00480495 /* DiffHubConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */; };
 		20682FEC1DFCF32900480495 /* DiffHubPull.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20682FEB1DFCF32900480495 /* DiffHubPull.swift */; };
 		209422C81DFF29DA00B0C163 /* DiffCodeLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209422C71DFF29DA00B0C163 /* DiffCodeLine.swift */; };
@@ -55,6 +56,7 @@
 		205D89751DFE8F82009D0579 /* CodeLineTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CodeLineTableViewCell.xib; sourceTree = "<group>"; };
 		205D89781DFE9287009D0579 /* SectionTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionTitleTableViewCell.swift; sourceTree = "<group>"; };
 		205D89791DFE9287009D0579 /* SectionTitleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SectionTitleTableViewCell.xib; sourceTree = "<group>"; };
+		205D897C1DFFBBFC009D0579 /* TopAlignedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopAlignedLabel.swift; sourceTree = "<group>"; };
 		20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubConstants.swift; sourceTree = "<group>"; };
 		20682FEB1DFCF32900480495 /* DiffHubPull.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffHubPull.swift; sourceTree = "<group>"; };
 		209422C71DFF29DA00B0C163 /* DiffCodeLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffCodeLine.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */,
 				205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */,
+				205D897C1DFFBBFC009D0579 /* TopAlignedLabel.swift */,
 				20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */,
 				20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */,
 				20D0FEAC1DFD095F00053940 /* PullRequestInfoTableViewCell.swift */,
@@ -300,6 +303,7 @@
 				20AAB2741DFD2E550062C381 /* PullsTableViewController.swift in Sources */,
 				20D0FEB11DFD1A8900053940 /* DiffHubUser.swift in Sources */,
 				20D0FEAE1DFD095F00053940 /* PullRequestInfoTableViewCell.swift in Sources */,
+				205D897D1DFFBBFC009D0579 /* TopAlignedLabel.swift in Sources */,
 				20310D971DFD6E8100B6C354 /* DiffHubFile.swift in Sources */,
 				205D89661DFE40AF009D0579 /* PullFileTableViewHeaderView.swift in Sources */,
 				205C3DD01DFCFC2B00059A87 /* DataManager.swift in Sources */,

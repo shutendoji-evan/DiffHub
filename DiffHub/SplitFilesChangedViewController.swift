@@ -77,7 +77,12 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
         //left-right code cell
         self.filesTV.register(UINib(nibName: "CodeLineTableViewCell", bundle: nil), forCellReuseIdentifier: "code")
         
+        //no seperatorLine
         self.filesTV.separatorStyle = .none
+        
+        //auto height
+        self.filesTV.rowHeight = UITableViewAutomaticDimension
+        self.filesTV.estimatedRowHeight = 18
 
     }
     
@@ -114,22 +119,22 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
         return lines.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let lines = self.files?[indexPath.section].codeLines else {
-            return 0
-        }
-        
-        let type = lines[indexPath.row].type
-        
-        switch type {
-        case .title:
-            return 28
-        case .plusOrMinor:
-            return 18
-        case .common:
-            return 18
-        }
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        guard let lines = self.files?[indexPath.section].codeLines else {
+//            return 0
+//        }
+//        
+//        let type = lines[indexPath.row].type
+//        
+//        switch type {
+//        case .title:
+//            return 28
+//        case .plusOrMinor:
+//            return 18
+//        case .common:
+//            return 18
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 43
@@ -324,8 +329,15 @@ extension SplitFilesChangedViewController {
         var lastFirstChar : Character?
         var diffCodeBlock = DiffCodeBlock()
         
-        for (_, line) in allLines.enumerated() {
+        for line in allLines {
+            
             let firstChar = line.characters.first
+            let lastChar = line.characters.last
+            
+            var line = line
+            if lastChar == "\r" {
+                line = String(line.characters.dropLast())
+            }
             
             if firstChar != "+" && firstChar != "-" {
                 if lastFirstChar != "+" && lastFirstChar != "-" {
@@ -348,31 +360,17 @@ extension SplitFilesChangedViewController {
             else {
                 if lastFirstChar != "+" && lastFirstChar != "-" {
                     //enter groupMode
-                    diffCodeBlock.blockArray.append(line)
-                    if firstChar == "+" {
-                        diffCodeBlock.plusNum += 1
-                    }
-                    else if firstChar == "-" {
-                        diffCodeBlock.minorNum += 1
-                    }
+                    diffCodeBlock.append(line: line)
                     lastFirstChar = firstChar
                     
                 }
                 else {
                     //inside groupMode
-                    diffCodeBlock.blockArray.append(line)
-                    if firstChar == "+" {
-                        diffCodeBlock.plusNum += 1
-                    }
-                    else if firstChar == "-" {
-                        diffCodeBlock.minorNum += 1
-                    }
+                    diffCodeBlock.append(line: line)
                     lastFirstChar = firstChar
-
                 }
                 
             }
-            
         }
         
         if diffCodeBlock.blockArray.count != 0 {
