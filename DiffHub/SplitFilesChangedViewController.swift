@@ -322,6 +322,20 @@ extension SplitFilesChangedViewController {
     
     func seperateLeftAndRight(diffFile : DiffFile) {
         
+        DispatchQueue.global(qos: .default).async {
+            let array = self.parseFileToArray(diffFile: diffFile)
+            guard let codeLines = self.parseArrayToCodeLines(organizedArray: array) else {
+                return
+            }
+            diffFile.codeLines = codeLines
+            
+            DispatchQueue.main.async {
+                self.filesTV.reloadData()
+            }
+        }
+    }
+    
+    func parseFileToArray(diffFile : DiffFile) -> NSMutableArray  {
         //parse file
         let allLines = diffFile.lines
         
@@ -335,6 +349,7 @@ extension SplitFilesChangedViewController {
             let lastChar = line.characters.last
             
             var line = line
+            //remove "\r"
             if lastChar == "\r" {
                 line = String(line.characters.dropLast())
             }
@@ -355,7 +370,7 @@ extension SplitFilesChangedViewController {
                     lastFirstChar = firstChar
                     continue
                 }
-
+                
             }
             else {
                 if lastFirstChar != "+" && lastFirstChar != "-" {
@@ -378,7 +393,11 @@ extension SplitFilesChangedViewController {
             organizedArray.add(diffCodeBlock)
             diffCodeBlock = DiffCodeBlock()
         }
-
+        
+        return organizedArray
+    }
+    
+    func parseArrayToCodeLines(organizedArray: NSMutableArray) -> Array<DiffCodeLine>?  {
         //Get codelines DataSource
         var leftLineNum = 0
         var rightLineNum = 0
@@ -412,7 +431,7 @@ extension SplitFilesChangedViewController {
                     
                     codeLines.append(codeLine)
                 }
-
+                
             }
             else {
                 let str = item as! String
@@ -424,7 +443,7 @@ extension SplitFilesChangedViewController {
                 if type == .title {
                     codeLine.sharedContent = str
                     guard let startNum = self.parseStartLineNumber(title: str) else {
-                        return
+                        return nil
                     }
                     codeLine.leftStartNum = startNum.0
                     leftLineNum = startNum.0
@@ -445,9 +464,7 @@ extension SplitFilesChangedViewController {
             }
         }
         
-        diffFile.codeLines = codeLines
-        
-        self.filesTV.reloadData()
+        return codeLines
     }
     
 }

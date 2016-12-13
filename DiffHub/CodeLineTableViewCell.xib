@@ -20,13 +20,13 @@
             <rect key="frame" x="0.0" y="0.0" width="667" height="18"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="667" height="17"/>
+                <rect key="frame" x="0.0" y="0.0" width="667" height="17.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yoi-CJ-G7M" userLabel="left">
                         <rect key="frame" x="0.0" y="0.0" width="333.5" height="17"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9O-al-UfB" customClass="TopAlignedLabel" customModule="DiffHub" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g9O-al-UfB" customClass="TopAlignedLabel" customModule="DiffHub" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="30" height="17"/>
                                 <fontDescription key="fontDescription" name="Hack-Regular" family="Hack" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
@@ -54,7 +54,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XG9-Cr-aes" userLabel="right">
                         <rect key="frame" x="333.5" y="0.0" width="333.5" height="17"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f5Q-qO-id9" customClass="TopAlignedLabel" customModule="DiffHub" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f5Q-qO-id9" customClass="TopAlignedLabel" customModule="DiffHub" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="30" height="17"/>
                                 <fontDescription key="fontDescription" name="Hack-Regular" family="Hack" pointSize="12"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>

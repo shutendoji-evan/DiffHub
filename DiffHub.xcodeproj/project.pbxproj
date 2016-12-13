@@ -95,6 +95,54 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		2044B44F1DFFCE15002E0C5D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				20682FEB1DFCF32900480495 /* DiffHubPull.swift */,
+				20D0FEB01DFD1A8900053940 /* DiffHubUser.swift */,
+				20310D961DFD6E8100B6C354 /* DiffHubFile.swift */,
+				209422C71DFF29DA00B0C163 /* DiffCodeLine.swift */,
+				209422D21DFF7FA700B0C163 /* DiffCodeBlock.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		2044B4501DFFCE2A002E0C5D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				205D897C1DFFBBFC009D0579 /* TopAlignedLabel.swift */,
+				20D0FEAC1DFD095F00053940 /* PullRequestInfoTableViewCell.swift */,
+				20D0FEAD1DFD095F00053940 /* PullRequestInfoTableViewCell.xib */,
+				205D89651DFE40AF009D0579 /* PullFileTableViewHeaderView.swift */,
+				205D89671DFE411B009D0579 /* PullFileTableViewHeaderView.xib */,
+				205D89741DFE8F82009D0579 /* CodeLineTableViewCell.swift */,
+				205D89751DFE8F82009D0579 /* CodeLineTableViewCell.xib */,
+				205D89781DFE9287009D0579 /* SectionTitleTableViewCell.swift */,
+				205D89791DFE9287009D0579 /* SectionTitleTableViewCell.xib */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		2044B4511DFFCE4C002E0C5D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				2044B4521DFFCE6B002E0C5D /* Helper */,
+				20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */,
+				20310D941DFD3C1800B6C354 /* SplitFilesChangedViewController.swift */,
+				20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		2044B4521DFFCE6B002E0C5D /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				20310D9A1DFDF76C00B6C354 /* RegexParser.swift */,
+				205C3DCF1DFCFC2B00059A87 /* DataManager.swift */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
 		205D89691DFE42D9009D0579 /* Font */ = {
 			isa = PBXGroup;
 			children = (
@@ -128,27 +176,11 @@
 		20CEAB451DFCEA3B00EDBBD1 /* DiffHub */ = {
 			isa = PBXGroup;
 			children = (
-				20CEAB461DFCEA3B00EDBBD1 /* AppDelegate.swift */,
 				205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */,
-				205D897C1DFFBBFC009D0579 /* TopAlignedLabel.swift */,
 				20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */,
-				20AAB2731DFD2E550062C381 /* PullsTableViewController.swift */,
-				20D0FEAC1DFD095F00053940 /* PullRequestInfoTableViewCell.swift */,
-				20D0FEAD1DFD095F00053940 /* PullRequestInfoTableViewCell.xib */,
-				20310D941DFD3C1800B6C354 /* SplitFilesChangedViewController.swift */,
-				205D89651DFE40AF009D0579 /* PullFileTableViewHeaderView.swift */,
-				205D89671DFE411B009D0579 /* PullFileTableViewHeaderView.xib */,
-				205D89741DFE8F82009D0579 /* CodeLineTableViewCell.swift */,
-				205D89751DFE8F82009D0579 /* CodeLineTableViewCell.xib */,
-				205D89781DFE9287009D0579 /* SectionTitleTableViewCell.swift */,
-				205D89791DFE9287009D0579 /* SectionTitleTableViewCell.xib */,
-				20682FEB1DFCF32900480495 /* DiffHubPull.swift */,
-				20D0FEB01DFD1A8900053940 /* DiffHubUser.swift */,
-				20310D961DFD6E8100B6C354 /* DiffHubFile.swift */,
-				209422C71DFF29DA00B0C163 /* DiffCodeLine.swift */,
-				209422D21DFF7FA700B0C163 /* DiffCodeBlock.swift */,
-				20310D9A1DFDF76C00B6C354 /* RegexParser.swift */,
-				205C3DCF1DFCFC2B00059A87 /* DataManager.swift */,
+				2044B4511DFFCE4C002E0C5D /* Controller */,
+				2044B4501DFFCE2A002E0C5D /* View */,
+				2044B44F1DFFCE15002E0C5D /* Model */,
 				20CEAB4A1DFCEA3B00EDBBD1 /* Main.storyboard */,
 				20CEAB4D1DFCEA3B00EDBBD1 /* Assets.xcassets */,
 				20CEAB4F1DFCEA3B00EDBBD1 /* LaunchScreen.storyboard */,

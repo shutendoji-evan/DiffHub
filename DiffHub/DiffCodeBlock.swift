@@ -61,7 +61,7 @@ class DiffCodeBlock {
             
         }
         else {
-            //equal
+            //equal - arrays are ready
         }
 
     }
