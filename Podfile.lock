@@ -3,6 +3,7 @@ PODS:
   - AMScrollingNavbar (3.0.0)
   - DateTools (1.7.0)
   - Kingfisher (3.2.2)
+  - NVActivityIndicatorView (3.1)
   - Realm (2.1.1):
     - Realm/Headers (= 2.1.1)
   - Realm/Headers (2.1.1)
@@ -15,6 +16,7 @@ DEPENDENCIES:
   - AMScrollingNavbar
   - DateTools
   - Kingfisher (~> 3.0)
+  - NVActivityIndicatorView
   - RealmSwift
   - SwiftyJSON
 
@@ -23,10 +25,11 @@ SPEC CHECKSUMS:
   AMScrollingNavbar: aa894c559c80ffa917d0fdc40d8b42be7c6efe15
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   Kingfisher: 821466474ad7ffc375a4aecadfa05068cfed67b3
+  NVActivityIndicatorView: 9f47e8a4affb860ef729aeec99b1550219e6c233
   Realm: a55959c0b171a5fe5267406d17f314fec3cefaae
   RealmSwift: 749fd955bf8d6471c21d218b9389a47aaeccfe3f
   SwiftyJSON: 38a8ea2006779c0fc4c310cb2ee8195327740faf
 
-PODFILE CHECKSUM: 24c71a943515b9b13c36745c002238b312784f8b
+PODFILE CHECKSUM: bcd9b55356006b8e13393bdb407d395aa7672367
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0.beta.1

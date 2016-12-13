@@ -9,6 +9,7 @@ target 'DiffHub' do
     pod 'Kingfisher', '~> 3.0'   
     pod 'AMScrollingNavbar'
     pod 'DateTools'
+    pod 'NVActivityIndicatorView'
 end
 
 post_install do |installer|

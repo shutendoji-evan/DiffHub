@@ -24,6 +24,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>NVActivityIndicatorView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-DiffHub.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,12 +57,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>32D52AB93D65667E04D4ACA3BB9A0821</key>
+		<key>2E6F53BCED0466A31232B9B6CE414670</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4B2E2D89E69A8B9A205369F57AC09609</key>
+		<key>3EDFE4052B5DE7D509935AC0774CB135</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +77,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A63B7CD00808239B539186FDAE48691E</key>
+		<key>AE1AF71B2410672392A012F93918482F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +87,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CD126F21A709CF8CF20015825A0595B3</key>
+		<key>EB65CF7D01E1308D7985B6D10EE8883C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F30D071D4E1C6CED5EE51A4E72A83292</key>
 		<dict>
 			<key>primary</key>
 			<true/>

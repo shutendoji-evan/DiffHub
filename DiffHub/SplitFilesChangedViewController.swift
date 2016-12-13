@@ -15,14 +15,13 @@ class SplitFilesChangedViewController: UIViewController {
     
     var pull : Pull?
     var pullId : Int?
-    var files : Array<DiffFile>?
+    var files = NSMutableArray() //append file to files on main thread only!
     
     @IBOutlet weak var filesTV : UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.setupOrientation()
         self.setupNavBar()
         self.setupTV()
 
@@ -41,7 +40,6 @@ class SplitFilesChangedViewController: UIViewController {
         }
         self.parseDiff(diffString: diffStr)
 
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,6 +48,8 @@ class SplitFilesChangedViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.setupOrientation()
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         
         if deviceIdiom == .phone {
@@ -114,17 +114,14 @@ class SplitFilesChangedViewController: UIViewController {
 extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        guard let count = self.files?.count else {
-            return 0
-        }
-        return count
+        return self.files.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let lines = self.files?[section].codeLines else {
+        guard let file = self.files.object(at: section) as? DiffFile else {
             return 0
         }
-        return lines.count
+        return file.codeLines.count
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -135,24 +132,24 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "PullFileTableViewHeaderView") as?PullFileTableViewHeaderView else {
             return UIView()
         }
-        guard let files = self.files else {
+        guard let file = self.files[section] as? DiffFile else {
             return headerView
         }
         
-        if files[section].sourceFileA == "" && files[section].sourceFileB == "" {
-            headerView.sectionTitle.text = files[section].title
+        if file.sourceFileA == "" && file.sourceFileB == "" {
+            headerView.sectionTitle.text = file.title
         }
-        else if files[section].sourceFileA == "" {
-             headerView.sectionTitle.text = files[section].sourceFileB
+        else if file.sourceFileA == "" {
+             headerView.sectionTitle.text = file.sourceFileB
         }
-        else if files[section].sourceFileB == "" {
-            headerView.sectionTitle.text = files[section].sourceFileA
+        else if file.sourceFileB == "" {
+            headerView.sectionTitle.text = file.sourceFileA
         }
-        else if files[section].sourceFileA == files[section].sourceFileB {
-            headerView.sectionTitle.text = files[section].sourceFileA
+        else if file.sourceFileA == file.sourceFileB {
+            headerView.sectionTitle.text = file.sourceFileA
         }
         else {
-            headerView.sectionTitle.text = files[section].sourceFileA + " -> " + files[section].sourceFileB
+            headerView.sectionTitle.text = file.sourceFileA + " -> " + file.sourceFileB
         }
         
         return headerView
@@ -160,12 +157,12 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let codeLines = self.files?[indexPath.section].codeLines else {
+
+        guard let file = self.files.object(at: indexPath.section) as? DiffFile else {
             return UITableViewCell()
         }
         
-        let codeLine = codeLines[indexPath.row]
+        let codeLine = file.codeLines[indexPath.row]
         
         switch codeLine.type {
         case .title:
@@ -255,16 +252,12 @@ extension SplitFilesChangedViewController : RegexParser {
     
     func parseDiff(diffString : String) {
  
-        DispatchQueue.global(qos: .default).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             guard let checkResults = self.parseStringToFiles(diffStr: diffString) else {
                 return
             }
             let diffStrNS = diffString as NSString
             self.generateFiles(diffStrNS: diffStrNS, checkResults: checkResults)
-            
-            DispatchQueue.main.async {
-                self.filesTV.reloadData()
-            }
         }
     }
     
@@ -329,9 +322,7 @@ extension SplitFilesChangedViewController : RegexParser {
     }
     
     func generateFiles(diffStrNS: NSString, checkResults: [NSTextCheckingResult]) {
-        
-        self.files = Array<DiffFile>()
-        
+
         //re-fetch the pull item for multiThreading
         guard let id = self.pullId else {
             print("fetch pull id failed")
@@ -384,19 +375,35 @@ extension SplitFilesChangedViewController : RegexParser {
                 diffFile.sections.append(fileSection)
             }
             
-            self.files?.append(diffFile)
-            self.seperateLeftAndRight(diffFile: diffFile)
+            self.seperateLeftAndRight(diffFile: diffFile, index: index)
         }
 
     }
     
-    func seperateLeftAndRight(diffFile : DiffFile) {
-        
+    func seperateLeftAndRight(diffFile : DiffFile, index: Int) {
+
         let array = self.parseFileToArray(diffFile: diffFile)
         guard let codeLines = self.parseArrayToCodeLines(organizedArray: array) else {
             return
         }
+        
         diffFile.codeLines = codeLines
+        DispatchQueue.main.async {
+            self.didFinishedProcessFile(diffFile: diffFile, index: index)
+        }
+
+    }
+    
+    func didFinishedProcessFile(diffFile: DiffFile, index: Int) {
+        //once one file processed, append and load it to tableView
+
+        self.files.add(diffFile) //on main-thread
+        
+        UIView.performWithoutAnimation {
+            //uitableview begin update animation not cool
+            self.filesTV.insertSections(IndexSet(integer: index) , with: .none)
+        }
+        
     }
     
     func parseFileToArray(diffFile : DiffFile) -> NSMutableArray  {
@@ -533,5 +540,4 @@ extension SplitFilesChangedViewController : RegexParser {
         
         return codeLines
     }
-    
 }

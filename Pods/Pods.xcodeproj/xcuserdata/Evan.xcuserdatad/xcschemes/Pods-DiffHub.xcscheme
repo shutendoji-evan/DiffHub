@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0820"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4B2E2D89E69A8B9A205369F57AC09609"
+               BlueprintIdentifier = "EB65CF7D01E1308D7985B6D10EE8883C"
                BuildableName = "Pods_DiffHub.framework"
                BlueprintName = "Pods-DiffHub"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4B2E2D89E69A8B9A205369F57AC09609"
+            BlueprintIdentifier = "EB65CF7D01E1308D7985B6D10EE8883C"
             BuildableName = "Pods_DiffHub.framework"
             BlueprintName = "Pods-DiffHub"
             ReferencedContainer = "container:Pods.xcodeproj">
