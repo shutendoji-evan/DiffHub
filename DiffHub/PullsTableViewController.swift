@@ -135,7 +135,7 @@ extension PullsTableViewController {
                 return
             }
             
-            guard let splitVC = segue.destination as? SplitFilesChangedViewController else {
+            guard let splitVC = segue.destination as? SplitChangesViewController else {
                 return
             }
             

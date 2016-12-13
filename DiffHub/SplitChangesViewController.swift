@@ -1,5 +1,5 @@
 //
-//  SplitFilesChangedViewController.swift
+//  SplitChangesViewController.swift
 //  DiffHub
 //
 //  Created by Hang Liang on 12/10/16.
@@ -10,12 +10,14 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import AMScrollingNavbar
+import NVActivityIndicatorView
 
-class SplitFilesChangedViewController: UIViewController {
+class SplitChangesViewController: UIViewController {
     
     var pull : Pull?
     var pullId : Int?
     var files = NSMutableArray() //append file to files on main thread only!
+    var downloadSpinner : NVActivityIndicatorView?
     
     @IBOutlet weak var filesTV : UITableView!
 
@@ -62,7 +64,7 @@ class SplitFilesChangedViewController: UIViewController {
 
     func setupNavBar() {
 
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "BackBtn"), style: .done, target: self, action: #selector(SplitFilesChangedViewController.goBack))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "BackBtn"), style: .done, target: self, action: #selector(SplitChangesViewController.goBack))
         self.navigationController?.navigationBar.tintColor = UIColor.black
         self.navigationController?.hidesBarsOnSwipe = true
         
@@ -111,7 +113,7 @@ class SplitFilesChangedViewController: UIViewController {
 
 }
 
-extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewDataSource {
+extension SplitChangesViewController : UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.files.count
@@ -218,10 +220,13 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
     }
 }
 
-extension SplitFilesChangedViewController : RegexParser {
+extension SplitChangesViewController : RegexParser {
     
     //downloadDiffFile if needed
     func downloadDiffFile() {
+        
+        //start the spinner
+        self.downloadSpinner = self.startSpinner(spinner: self.downloadSpinner, onView: self.view)
         
         guard let pull = self.pull else {
             print("Fetch pull failed")
@@ -243,6 +248,9 @@ extension SplitFilesChangedViewController : RegexParser {
                         
                         //parse
                         self.parseDiff(diffString: diffString)
+                        
+                        //stop spinner
+                        self.stopSpinner(spinner: self.downloadSpinner)
                     }
                     
                 }
@@ -261,7 +269,7 @@ extension SplitFilesChangedViewController : RegexParser {
         }
     }
     
-    func saveStringToFile(pull: Pull, content: String) {
+    private func saveStringToFile(pull: Pull, content: String) {
         
         do {
             // get the documents folder url
@@ -321,7 +329,7 @@ extension SplitFilesChangedViewController : RegexParser {
 
     }
     
-    func generateFiles(diffStrNS: NSString, checkResults: [NSTextCheckingResult]) {
+    private func generateFiles(diffStrNS: NSString, checkResults: [NSTextCheckingResult]) {
 
         //re-fetch the pull item for multiThreading
         guard let id = self.pullId else {
@@ -380,7 +388,7 @@ extension SplitFilesChangedViewController : RegexParser {
 
     }
     
-    func seperateLeftAndRight(diffFile : DiffFile, index: Int) {
+    private func seperateLeftAndRight(diffFile : DiffFile, index: Int) {
 
         let array = self.parseFileToArray(diffFile: diffFile)
         guard let codeLines = self.parseArrayToCodeLines(organizedArray: array) else {
@@ -394,7 +402,7 @@ extension SplitFilesChangedViewController : RegexParser {
 
     }
     
-    func didFinishedProcessFile(diffFile: DiffFile, index: Int) {
+    private func didFinishedProcessFile(diffFile: DiffFile, index: Int) {
         //once one file processed, append and load it to tableView
 
         self.files.add(diffFile) //on main-thread
@@ -406,7 +414,7 @@ extension SplitFilesChangedViewController : RegexParser {
         
     }
     
-    func parseFileToArray(diffFile : DiffFile) -> NSMutableArray  {
+    private func parseFileToArray(diffFile : DiffFile) -> NSMutableArray  {
         //parse file
         let allLines = diffFile.lines
         
@@ -471,7 +479,7 @@ extension SplitFilesChangedViewController : RegexParser {
         return organizedArray
     }
     
-    func parseArrayToCodeLines(organizedArray: NSMutableArray) -> Array<DiffCodeLine>?  {
+    private func parseArrayToCodeLines(organizedArray: NSMutableArray) -> Array<DiffCodeLine>?  {
         //Get codelines DataSource
         var leftLineNum = 0
         var rightLineNum = 0
@@ -539,5 +547,39 @@ extension SplitFilesChangedViewController : RegexParser {
         }
         
         return codeLines
+    }
+}
+
+
+extension SplitChangesViewController {
+    func startSpinner(spinner: NVActivityIndicatorView?, onView: UIView) -> NVActivityIndicatorView {
+        if let spinner = spinner {
+            //start
+            spinner.startAnimating()
+            
+            return spinner
+        }
+        else {
+            //create and start
+            let spinnerFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width/10, height: UIScreen.main.bounds.width/10)
+            let spinner = NVActivityIndicatorView(frame: spinnerFrame,
+                                                  type: .cubeTransition,
+                                                  color: UIColor.getIconBackgroundColor(), padding: 0)
+            spinner.center = self.view.center
+            
+            onView.addSubview(spinner)
+            spinner.startAnimating()
+            
+            return spinner
+        }
+    }
+    
+    func stopSpinner(spinner: NVActivityIndicatorView?) {
+        guard let spinner = spinner else {
+            print("no spinner to stop")
+            return
+        }
+        
+        spinner.stopAnimating()
     }
 }

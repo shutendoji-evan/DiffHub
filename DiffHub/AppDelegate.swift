@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         
         if let nc = self.window?.rootViewController as? UINavigationController {
-            if nc.topViewController is SplitFilesChangedViewController {
+            if nc.topViewController is SplitChangesViewController {
                 return UIInterfaceOrientationMask.landscape
             }
             else {

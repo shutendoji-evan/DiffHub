@@ -11,6 +11,10 @@ import UIKit
 
 extension UIColor {
     
+    class func getIconBackgroundColor() -> UIColor {
+        return UIColor(red: 52/255, green: 73/255, blue: 94/255, alpha: 1.0)
+    }
+    
     class func getOriFileRedColor() -> UIColor {
         return UIColor(red: 255/255, green: 236/255, blue: 236/255, alpha: 1.0)
     }
