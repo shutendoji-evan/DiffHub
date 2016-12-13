@@ -176,11 +176,11 @@
 		20CEAB451DFCEA3B00EDBBD1 /* DiffHub */ = {
 			isa = PBXGroup;
 			children = (
-				205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */,
-				20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */,
 				2044B4511DFFCE4C002E0C5D /* Controller */,
 				2044B4501DFFCE2A002E0C5D /* View */,
 				2044B44F1DFFCE15002E0C5D /* Model */,
+				205D89721DFE831A009D0579 /* UIColor+GithubColor.swift */,
+				20682FE91DFCEE8A00480495 /* DiffHubConstants.swift */,
 				20CEAB4A1DFCEA3B00EDBBD1 /* Main.storyboard */,
 				20CEAB4D1DFCEA3B00EDBBD1 /* Assets.xcassets */,
 				20CEAB4F1DFCEA3B00EDBBD1 /* LaunchScreen.storyboard */,

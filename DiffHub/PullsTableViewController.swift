@@ -12,6 +12,7 @@ import SwiftyJSON
 import RealmSwift
 import Kingfisher
 import AMScrollingNavbar
+import DateTools
 
 class PullsTableViewController: UITableViewController {
     
@@ -101,7 +102,7 @@ extension PullsTableViewController {
         cell.avatarIV.kf.setImage(with: avatar_url, placeholder: nil, options: nil, progressBlock: nil, completionHandler: nil)
         
         if pullData.state == "open" {
-            cell.pullDescriptionLabel.text = "#\(pullData.number) opened on \(pullData.creationDate) by \(pullUser.login)"
+            cell.pullDescriptionLabel.text = "#\(pullData.number) opened on \(pullData.sinceNow) by \(pullUser.login)"
         }
         else if pullData.state == "close" {
             
@@ -149,7 +150,7 @@ extension PullsTableViewController {
     //load pulls from realm
     func getPulls() {
         
-        guard let pullResults = DataManager.sharedInstance.getPulls() else {
+        guard let pullResults = DataManager.getPulls() else {
             print("failed to fetch pulls")
             return
         }
@@ -167,13 +168,13 @@ extension PullsTableViewController {
                         return
                     }
                     
-                    //write into realm
                     let pullsData = JSON(data: data)
-                    DataManager.sharedInstance.writePull(pullJSON: pullsData)
-
+                    DataManager.writePull(pullJSON: pullsData)
+                    self.getPulls()
+                    
                     //finished
                     self.didUpdatedPullRequests()
-                    
+
                 }
                 else {
                     print("Failed request pulls due to \(response.description)")
@@ -183,7 +184,6 @@ extension PullsTableViewController {
     }
     
     func didUpdatedPullRequests() {
-        self.getPulls()
         self.tableView.reloadData()
         self.refreshControl?.endRefreshing()
     }

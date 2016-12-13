@@ -10,14 +10,9 @@ import Foundation
 import RealmSwift
 import SwiftyJSON
 
-class DataManager {
+struct DataManager {
     
-    static let sharedInstance : DataManager = {
-        let instance = DataManager()
-        return instance
-    }()
-    
-    func getRealm() -> Realm? {
+    static func getRealm() -> Realm? {
         guard let realm = try? Realm() else {
             return nil
         }
@@ -25,7 +20,7 @@ class DataManager {
         return realm
     }
     
-    func getPulls() -> Results<Pull>? {
+    static func getPulls() -> Results<Pull>? {
         guard let realm = self.getRealm() else {
             return nil
         }
@@ -33,7 +28,21 @@ class DataManager {
         return realm.objects(Pull.self)
     }
     
-    func writePull(pullJSON : JSON) {
+    static func getPull(id : Int) -> Pull? {
+        
+        guard let realm = DataManager.getRealm() else {
+            print("fetch realm failed")
+            return nil
+        }
+        guard let pull = realm.objects(Pull.self).filter("id = \(id)").first else {
+            print("Fetch pull failed")
+            return nil
+        }
+        
+        return pull
+    }
+    
+    static func writePull(pullJSON : JSON) {
         guard let realm = self.getRealm() else {
             return
         }
@@ -65,6 +74,15 @@ class DataManager {
             }
             if let created_at : String = pull.1["created_at"].string {
                 pullRequest.creationDate = created_at
+                
+                //date
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                if let date = dateFormatter.date(from: created_at) {
+                    let dateNS = date as NSDate
+                    pullRequest.sinceNow = dateNS.timeAgoSinceNow().lowercased()
+                }
+                
             }
             
             //user
@@ -95,6 +113,20 @@ class DataManager {
             }
         }
 
+    }
+    
+    static func writeFilePathToPull(filePath: URL, pull: Pull) {
+        guard let realm = DataManager.getRealm() else {
+            return
+        }
+        do {
+            try realm.write {
+                pull.diffFileDir = filePath.absoluteString
+            }
+            
+        } catch {
+            print("write pull: #\(pull.number) into realm failed.")
+        }
     }
     
 }

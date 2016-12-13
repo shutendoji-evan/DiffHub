@@ -12,6 +12,8 @@ import RealmSwift
 protocol RegexParser {
     func parseStringToFiles(diffStr: String) -> [NSTextCheckingResult]?
     func parseSections(fileStr : String) -> [NSTextCheckingResult]?
+    func parseFileNames(fileStr: String) -> (String, String)?
+    func parseStartLineNumber(title: String) -> (Int, Int)?
 }
 
 extension RegexParser {

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EC11654C1894696B6B490ECD6D1C15F1"
+               BlueprintIdentifier = "4B2E2D89E69A8B9A205369F57AC09609"
                BuildableName = "Pods_DiffHub.framework"
                BlueprintName = "Pods-DiffHub"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EC11654C1894696B6B490ECD6D1C15F1"
+            BlueprintIdentifier = "4B2E2D89E69A8B9A205369F57AC09609"
             BuildableName = "Pods_DiffHub.framework"
             BlueprintName = "Pods-DiffHub"
             ReferencedContainer = "container:Pods.xcodeproj">

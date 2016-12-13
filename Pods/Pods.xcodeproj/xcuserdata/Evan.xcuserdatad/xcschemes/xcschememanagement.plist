@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>DateTools.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Kingfisher.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,17 +47,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1564425F33CCF88DB6B9E17117902EA8</key>
+		<key>019B8DD7F9406148F9C695DB96EBC4A3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>64A956E0510AAD643E63117956BA924A</key>
+		<key>32D52AB93D65667E04D4ACA3BB9A0821</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>70D40FC649018922FA7AF62F4363AB1C</key>
+		<key>4B2E2D89E69A8B9A205369F57AC09609</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -67,12 +72,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>A63B7CD00808239B539186FDAE48691E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C4944FEC314D1A66588651D006273ADE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EC11654C1894696B6B490ECD6D1C15F1</key>
+		<key>CD126F21A709CF8CF20015825A0595B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -8,6 +8,7 @@ target 'DiffHub' do
     pod 'RealmSwift'
     pod 'Kingfisher', '~> 3.0'   
     pod 'AMScrollingNavbar'
+    pod 'DateTools'
 end
 
 post_install do |installer|

@@ -45,6 +45,8 @@ class DiffCodeBlock {
             }
         }
 
+        
+        //using "$" to represent placeholder line
         if diffNum > 0 {
             //more minor
             for _ in 0..<diffNum {

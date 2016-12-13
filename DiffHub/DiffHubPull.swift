@@ -19,7 +19,9 @@ class Pull : Object {
     dynamic var title : String = ""
     dynamic var body : String = ""
     dynamic var creationDate : String = ""
+    dynamic var sinceNow : String = ""
     dynamic var updatedDate : String = ""
+    dynamic var diffFileDir : String = ""
     
     dynamic var user : User?
     //let files = List<DiffFile>()

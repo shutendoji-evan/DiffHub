@@ -11,11 +11,10 @@ import Alamofire
 import SwiftyJSON
 import AMScrollingNavbar
 
-class SplitFilesChangedViewController: UIViewController, RegexParser {
+class SplitFilesChangedViewController: UIViewController {
     
     var pull : Pull?
-    var diffString : String?
-    var lastScreenOri = UIInterfaceOrientation.unknown
+    var pullId : Int?
     var files : Array<DiffFile>?
     
     @IBOutlet weak var filesTV : UITableView!
@@ -26,10 +25,23 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
         self.setupOrientation()
         self.setupNavBar()
         self.setupTV()
+
+        guard let pull = self.pull else {
+            print("pull is not been setup")
+            return
+        }
         
-        //TODO : Check if it's downloaded
+        self.pullId = pull.id
         
-        self.downloadDiffFile()
+        //load from local disk if downloaded else download it
+        guard let diffStr = self.readSavedStringFromFile(pull: pull) else {
+            print("Fetch local diff file failed. Will download it")
+            self.downloadDiffFile()
+            return
+        }
+        self.parseDiff(diffString: diffStr)
+
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -38,15 +50,16 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if let navigationController = navigationController as? ScrollingNavigationController {
-            navigationController.followScrollView(filesTV, delay: 50.0)
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         
+        if deviceIdiom == .phone {
+            if let navigationController = navigationController as? ScrollingNavigationController {
+                navigationController.followScrollView(filesTV, delay: 50.0)
+            }
+        }
+
     }
-    
+
     func setupNavBar() {
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "BackBtn"), style: .done, target: self, action: #selector(SplitFilesChangedViewController.goBack))
@@ -89,16 +102,11 @@ class SplitFilesChangedViewController: UIViewController, RegexParser {
     func setupOrientation() {
         
         let currentOri = UIApplication.shared.statusBarOrientation
-        self.lastScreenOri = currentOri
         
         if currentOri.isPortrait {
             UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
         }
         
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        UIDevice.current.setValue(self.lastScreenOri.rawValue, forKey: "orientation")
     }
 
 }
@@ -118,23 +126,6 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
         }
         return lines.count
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        guard let lines = self.files?[indexPath.section].codeLines else {
-//            return 0
-//        }
-//        
-//        let type = lines[indexPath.row].type
-//        
-//        switch type {
-//        case .title:
-//            return 28
-//        case .plusOrMinor:
-//            return 18
-//        case .common:
-//            return 18
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 43
@@ -230,7 +221,7 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
     }
 }
 
-extension SplitFilesChangedViewController {
+extension SplitFilesChangedViewController : RegexParser {
     
     //downloadDiffFile if needed
     func downloadDiffFile() {
@@ -250,13 +241,11 @@ extension SplitFilesChangedViewController {
                             print("parse diff string failed.")
                             return
                         }
-                        self.diffString = diffString
-                        let diffStrNS = diffString as NSString
+                        //save
+                        self.saveStringToFile(pull: pull, content: diffString)
                         
-                        guard let checkResults = self.parseStringToFiles(diffStr: diffString) else {
-                            return
-                        }
-                        self.generateFiles(diffStrNS: diffStrNS, checkResults: checkResults)
+                        //parse
+                        self.parseDiff(diffString: diffString)
                     }
                     
                 }
@@ -264,11 +253,92 @@ extension SplitFilesChangedViewController {
         
     }
     
+    func parseDiff(diffString : String) {
+ 
+        DispatchQueue.global(qos: .default).async {
+            guard let checkResults = self.parseStringToFiles(diffStr: diffString) else {
+                return
+            }
+            let diffStrNS = diffString as NSString
+            self.generateFiles(diffStrNS: diffStrNS, checkResults: checkResults)
+            
+            DispatchQueue.main.async {
+                self.filesTV.reloadData()
+            }
+        }
+    }
+    
+    func saveStringToFile(pull: Pull, content: String) {
+        
+        do {
+            // get the documents folder url
+            let documentDirectoryURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            
+            // create the destination url for the text file to be saved
+            let fileDestinationUrl = documentDirectoryURL.appendingPathComponent(String(pull.id) + ".diff")
+            
+            let text = content
+            do {
+                // writing to disk
+                try text.write(to: fileDestinationUrl, atomically: false, encoding: .utf8)
+                print("saving was successful")
+                
+                //save diffFile path into pull
+                DataManager.writeFilePathToPull(filePath: fileDestinationUrl, pull: pull)
+                
+            } catch let error {
+                print("error writing to url \(fileDestinationUrl)")
+                print(error.localizedDescription)
+            }
+        } catch let error {
+            print("error getting documentDirectoryURL")
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    func readSavedStringFromFile(pull: Pull) -> String? {
+        // reading from disk
+        
+        do {
+            // get the documents folder url
+            let documentDirectoryURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            
+            // create the destination url for the text file to be saved
+            let fileDestinationUrl = documentDirectoryURL.appendingPathComponent(String(pull.id) + ".diff")
+            
+            do {
+                let diffString = try String(contentsOf: fileDestinationUrl)
+                return diffString
+                
+            } catch let error as NSError {
+                print("error loading contentsOf url \(pull.diffFileDir)")
+                print(error.localizedDescription)
+                
+                return nil
+            }
+            
+            
+        } catch let error {
+            print("error getting documentDirectoryURL")
+            print(error.localizedDescription)
+            
+            return nil
+        }
+
+    }
+    
     func generateFiles(diffStrNS: NSString, checkResults: [NSTextCheckingResult]) {
         
         self.files = Array<DiffFile>()
-        guard let pull = self.pull else {
-            print("Fetch pull failed")
+        
+        //re-fetch the pull item for multiThreading
+        guard let id = self.pullId else {
+            print("fetch pull id failed")
+            return
+        }
+        guard let pull = DataManager.getPull(id: id) else {
+            print("fetch pull failed")
             return
         }
         
@@ -322,17 +392,11 @@ extension SplitFilesChangedViewController {
     
     func seperateLeftAndRight(diffFile : DiffFile) {
         
-        DispatchQueue.global(qos: .default).async {
-            let array = self.parseFileToArray(diffFile: diffFile)
-            guard let codeLines = self.parseArrayToCodeLines(organizedArray: array) else {
-                return
-            }
-            diffFile.codeLines = codeLines
-            
-            DispatchQueue.main.async {
-                self.filesTV.reloadData()
-            }
+        let array = self.parseFileToArray(diffFile: diffFile)
+        guard let codeLines = self.parseArrayToCodeLines(organizedArray: array) else {
+            return
         }
+        diffFile.codeLines = codeLines
     }
     
     func parseFileToArray(diffFile : DiffFile) -> NSMutableArray  {
@@ -349,9 +413,12 @@ extension SplitFilesChangedViewController {
             let lastChar = line.characters.last
             
             var line = line
-            //remove "\r"
+            //remove "\r"s
             if lastChar == "\r" {
                 line = String(line.characters.dropLast())
+            }
+            if firstChar == "\r" {
+                line = String(line.characters.dropFirst())
             }
             
             if firstChar != "+" && firstChar != "-" {
@@ -409,7 +476,7 @@ extension SplitFilesChangedViewController {
                 for i in 0..<blockObj.blockMinor!.count {
                     let codeLine = DiffCodeLine()
                     codeLine.type = .plusOrMinor
-                    
+
                     if blockObj.blockMinor![i].characters.first == "$" {
                         codeLine.leftContent = ""
                         codeLine.isLeftNull = true
