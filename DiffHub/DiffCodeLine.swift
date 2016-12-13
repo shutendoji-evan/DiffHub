@@ -22,9 +22,11 @@ class DiffCodeLine {
     
     var leftContent = ""
     var leftNum = 0
+    var leftStartNum = 0
     
     var rightContent = ""
     var rightNum = 0
+    var rightStartNum = 0
     
     var sharedContent = ""
     

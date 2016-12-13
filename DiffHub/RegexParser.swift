@@ -41,29 +41,6 @@ extension RegexParser {
         return sectionMatches
     }
     
-//    func parseMode(fileStr: String) -> String? {
-//        let deletePattern = "diff --git a/.* b/.*\n"
-//        let newPattern = "diff --git a/.* b/.*\n"
-//        let indexPattern = "diff --git a/.* b/.*\n"
-//        
-//        guard let _ = try? NSRegularExpression(pattern: deletePattern, options: []) else {
-//            print("regex mode failed")
-//            return nil
-//        }
-//        
-//        guard let _ = try? NSRegularExpression(pattern: newPattern, options: []) else {
-//            print("regex mode failed")
-//            return nil
-//        }
-//        
-//        guard let _ = try? NSRegularExpression(pattern: indexPattern, options: []) else {
-//            print("regex mode failed")
-//            return nil
-//        }
-//        
-//        return nil
-//    }
-    
     func parseFileNames(fileStr: String) -> (String, String)? {
         
         let fileAParttern = "(?<=(--- a/)).*"
@@ -91,6 +68,44 @@ extension RegexParser {
         
         
         return (strA, strB)
+    }
+    
+    func parseStartLineNumber(title: String) -> (Int, Int)? {
+        
+        let startPatternLeft = "(?<=@@ -)\\d+"
+        
+        guard let startRegex = try? NSRegularExpression(pattern: startPatternLeft, options: []) else {
+            print("regex parse left lineNum generate failed")
+            return nil
+        }
+
+        guard let startLeft = startRegex.matches(in: title, options: [], range: NSRange(location: 0, length: title.characters.count)).first else {
+            print("regex parse left line number start failed")
+            return nil
+        }
+        
+        guard let numStartLeft = Int((title as NSString).substring(with: startLeft.range)) else {
+            print("parse numStartLeft failed")
+            return nil
+        }
+        
+        let startPateernRight = "\\+\\d+"
+        guard let startRegexRight = try? NSRegularExpression(pattern: startPateernRight, options: []) else {
+            print("regex parse right lineNum generate failed")
+            return nil
+        }
+        
+        guard let startRight = startRegexRight.matches(in: title, options: [], range: NSRange(location: 0, length: title.characters.count)).first else {
+            print("regex parse right line number start failed")
+            return nil
+        }
+        
+        guard let numStartRight = Int((title as NSString).substring(with: startRight.range)) else {
+            print("parse numStartRight failed")
+            return nil
+        }
+        
+        return (numStartLeft, numStartRight)
     }
     
 }

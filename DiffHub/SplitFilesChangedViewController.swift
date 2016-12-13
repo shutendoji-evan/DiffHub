@@ -181,12 +181,12 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
         case .common:
             let cell = tableView.dequeueReusableCell(withIdentifier: "code", for: indexPath) as! CodeLineTableViewCell
             cell.leftCodeLabel.text = codeLine.leftContent
-            cell.leftLineNumLabel.text = "0"
+            cell.leftLineNumLabel.text = String(codeLine.leftNum)
             cell.leftCodeLabel.backgroundColor = UIColor.white
             cell.leftLineNumLabel.backgroundColor = UIColor.white
             
             cell.rightCodeLabel.text = codeLine.rightContent
-            cell.rightLineNumLabel.text = "0"
+            cell.rightLineNumLabel.text = String(codeLine.rightNum)
             cell.rightCodeLabel.backgroundColor = UIColor.white
             cell.rightLineNumLabel.backgroundColor = UIColor.white
             
@@ -201,7 +201,7 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
             }
             else {
                 cell.leftCodeLabel.text = codeLine.leftContent
-                cell.leftLineNumLabel.text = "0"
+                cell.leftLineNumLabel.text = String(codeLine.leftNum)
                 cell.leftCodeLabel.backgroundColor = UIColor.getOriFileRedColor()
                 cell.leftLineNumLabel.backgroundColor = UIColor.getOriLineNumRedColor()
             }
@@ -214,7 +214,7 @@ extension SplitFilesChangedViewController : UITableViewDelegate, UITableViewData
             }
             else {
                 cell.rightCodeLabel.text = codeLine.rightContent
-                cell.rightLineNumLabel.text = "0"
+                cell.rightLineNumLabel.text = String(codeLine.rightNum)
                 cell.rightCodeLabel.backgroundColor = UIColor.getNewFileGreenColor()
                 cell.rightLineNumLabel.backgroundColor = UIColor.getNewLineNumGreenColor()
             }
@@ -240,7 +240,6 @@ extension SplitFilesChangedViewController {
         Alamofire.request(diff_url, method: .get, parameters: nil, encoding: JSONEncoding.default)
             .responseString { (response) in
                 if response.result.isSuccess {
-                    //print(response.data!)
                     if let data = response.data {
                         guard let diffString = String(data: data, encoding: .utf8) else {
                             print("parse diff string failed.")
@@ -256,7 +255,6 @@ extension SplitFilesChangedViewController {
                     }
                     
                 }
-                
         }
         
     }
@@ -318,6 +316,8 @@ extension SplitFilesChangedViewController {
     }
     
     func seperateLeftAndRight(diffFile : DiffFile) {
+        
+        //parse file
         let allLines = diffFile.lines
         
         let organizedArray = NSMutableArray()
@@ -346,7 +346,6 @@ extension SplitFilesChangedViewController {
 
             }
             else {
-                
                 if lastFirstChar != "+" && lastFirstChar != "-" {
                     //enter groupMode
                     diffCodeBlock.blockArray.append(line)
@@ -382,6 +381,10 @@ extension SplitFilesChangedViewController {
             diffCodeBlock = DiffCodeBlock()
         }
 
+        //Get codelines DataSource
+        var leftLineNum = 0
+        var rightLineNum = 0
+        
         var codeLines = Array<DiffCodeLine>()
         for item in organizedArray {
             if item is DiffCodeBlock {
@@ -396,6 +399,8 @@ extension SplitFilesChangedViewController {
                     }
                     else {
                         codeLine.leftContent = blockObj.blockMinor![i]
+                        codeLine.leftNum = leftLineNum
+                        leftLineNum += 1
                     }
                     if blockObj.blockPlus![i].characters.first == "$" {
                         codeLine.rightContent = ""
@@ -403,6 +408,8 @@ extension SplitFilesChangedViewController {
                     }
                     else {
                         codeLine.rightContent = blockObj.blockPlus![i]
+                        codeLine.rightNum = rightLineNum
+                        rightLineNum += 1
                     }
                     
                     codeLines.append(codeLine)
@@ -418,10 +425,22 @@ extension SplitFilesChangedViewController {
                 
                 if type == .title {
                     codeLine.sharedContent = str
+                    guard let startNum = self.parseStartLineNumber(title: str) else {
+                        return
+                    }
+                    codeLine.leftStartNum = startNum.0
+                    leftLineNum = startNum.0
+                    codeLine.rightStartNum = startNum.1
+                    rightLineNum = startNum.1
+                    
                 }
                 else if type == .common {
                     codeLine.leftContent = str
                     codeLine.rightContent = str
+                    codeLine.leftNum = leftLineNum
+                    codeLine.rightNum = rightLineNum
+                    leftLineNum += 1
+                    rightLineNum += 1
                 }
                 
                 codeLines.append(codeLine)
