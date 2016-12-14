@@ -108,7 +108,13 @@ class SplitChangesViewController: UIViewController {
         if currentOri.isPortrait {
             UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
         }
+
         
+    }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: .UIDeviceOrientationDidChange, object: nil)
     }
 
 }
@@ -561,12 +567,16 @@ extension SplitChangesViewController {
         }
         else {
             //create and start
-            let spinnerFrame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width/10, height: UIScreen.main.bounds.width/10)
+            let currentOri = UIApplication.shared.statusBarOrientation
+
+            let width = currentOri.isPortrait ? UIScreen.main.bounds.width/6 : UIScreen.main.bounds.height/6
+            
+            let spinnerFrame = CGRect(x: 0, y: 0, width: width, height: width)
             let spinner = NVActivityIndicatorView(frame: spinnerFrame,
                                                   type: .cubeTransition,
                                                   color: UIColor.getIconBackgroundColor(), padding: 0)
-            spinner.center = self.view.center
-            
+            spinner.center = currentOri.isPortrait ? CGPoint(x: self.view.center.y, y: self.view.center.x) : self.view.center
+
             onView.addSubview(spinner)
             spinner.startAnimating()
             

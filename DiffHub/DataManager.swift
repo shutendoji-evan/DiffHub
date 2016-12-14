@@ -25,7 +25,7 @@ struct DataManager {
             return nil
         }
         
-        return realm.objects(Pull.self)
+        return realm.objects(Pull.self).filter("belongsTo = '\(DiffHubConstants.repositoryName)'")
     }
     
     static func getPull(id : Int) -> Pull? {
@@ -46,10 +46,11 @@ struct DataManager {
         guard let realm = self.getRealm() else {
             return
         }
-        
+
         for pull in pullJSON {
             
             let pullRequest = Pull()
+            
             
             if let id : Int = pull.1["id"].int {
                 pullRequest.id = id
@@ -84,6 +85,8 @@ struct DataManager {
                 }
                 
             }
+            
+            pullRequest.belongsTo = DiffHubConstants.repositoryName
             
             //user
             if let userDict = pull.1["user"].dictionary {

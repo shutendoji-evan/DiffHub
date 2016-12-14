@@ -22,9 +22,9 @@ class Pull : Object {
     dynamic var sinceNow : String = ""
     dynamic var updatedDate : String = ""
     dynamic var diffFileDir : String = ""
+    dynamic var belongsTo : String = ""
     
     dynamic var user : User?
-    //let files = List<DiffFile>()
     
     override static func primaryKey() -> String? {
         return "id"

@@ -17,20 +17,60 @@ import DateTools
 class PullsTableViewController: UITableViewController {
     
     var pulls : Results<Pull>?
+    var notificationToken: NotificationToken? = nil
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         self.setupNavBar()
-        
-        self.getPulls()
+
         self.setupTV()
-        self.updatePullRequestsList()
         
         //setup pull refresh
         self.refreshControl?.addTarget(self, action: #selector(PullsTableViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        
+        //realm changes notification
+        self.setupRealmNotification()
+        
+        self.updatePullRequestsList()
 
+    }
+    
+    func setupRealmNotification() {
+        
+        self.pulls = DataManager.getPulls()
+        
+        self.notificationToken = self.pulls?.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else {
+                return
+            }
+            switch changes {
+            case .initial:
+                self?.didUpdatedPullRequests()
+                break
+            case .update(_, let deletions, let insertions, let modifications):
+
+                tableView.beginUpdates()
+                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                     with: .automatic)
+                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                tableView.endUpdates()
+                break
+            case .error(let error):
+                
+                fatalError("\(error)")
+                break
+            }
+        })
+        
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.notificationToken?.stop()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -146,17 +186,7 @@ extension PullsTableViewController {
 }
 
 extension PullsTableViewController {
-    
-    //load pulls from realm
-    func getPulls() {
-        
-        guard let pullResults = DataManager.getPulls() else {
-            print("failed to fetch pulls")
-            return
-        }
-        
-        self.pulls = pullResults.sorted(byProperty: "number", ascending: false)
-    }
+
     
     //update pulls
     func updatePullRequestsList() {
@@ -168,12 +198,12 @@ extension PullsTableViewController {
                         return
                     }
                     
-                    let pullsData = JSON(data: data)
-                    DataManager.writePull(pullJSON: pullsData)
-                    self.getPulls()
+                    self.refreshControl?.endRefreshing()
                     
-                    //finished
-                    self.didUpdatedPullRequests()
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        let pullsData = JSON(data: data)
+                        DataManager.writePull(pullJSON: pullsData)
+                    }
 
                 }
                 else {
@@ -185,7 +215,6 @@ extension PullsTableViewController {
     
     func didUpdatedPullRequests() {
         self.tableView.reloadData()
-        self.refreshControl?.endRefreshing()
     }
     
 }
