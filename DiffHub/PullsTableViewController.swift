@@ -47,7 +47,7 @@ class PullsTableViewController: UITableViewController {
             }
             switch changes {
             case .initial:
-                self?.didUpdatedPullRequests()
+                self?.tableView.reloadData()
                 break
             case .update(_, let deletions, let insertions, let modifications):
 
@@ -109,7 +109,6 @@ class PullsTableViewController: UITableViewController {
 extension PullsTableViewController {
     
     // pullRequests tableView delegate
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -187,7 +186,6 @@ extension PullsTableViewController {
 
 extension PullsTableViewController {
 
-    
     //update pulls
     func updatePullRequestsList() {
         Alamofire.request(DiffHubConstants.pullsURL, method: .get, parameters: nil, encoding: JSONEncoding.default)
@@ -211,10 +209,6 @@ extension PullsTableViewController {
                 }
         }
         
-    }
-    
-    func didUpdatedPullRequests() {
-        self.tableView.reloadData()
     }
     
 }
