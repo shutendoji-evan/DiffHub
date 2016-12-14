@@ -30,9 +30,6 @@ class PullsTableViewController: UITableViewController {
         //setup pull refresh
         self.refreshControl?.addTarget(self, action: #selector(PullsTableViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         
-        //realm changes notification
-        self.setupRealmNotification()
-        
         self.updatePullRequestsList()
 
     }
@@ -52,13 +49,20 @@ class PullsTableViewController: UITableViewController {
             case .update(_, let deletions, let insertions, let modifications):
 
                 tableView.beginUpdates()
-                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
-                                     with: .automatic)
-                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
-                                     with: .automatic)
-                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
-                                     with: .automatic)
+                if insertions.count > 0 {
+                    tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                         with: .automatic)
+                }
+                if deletions.count > 0 {
+                    tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                         with: .automatic)
+                }
+                if modifications.count > 0 {
+                    tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                         with: .automatic)
+                }
                 tableView.endUpdates()
+                
                 break
             case .error(let error):
                 
@@ -69,15 +73,18 @@ class PullsTableViewController: UITableViewController {
         
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        self.notificationToken?.stop()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         if let navigationController = navigationController as? ScrollingNavigationController {
             //navigationController.followScrollView(tableView, delay: 50.0)
             navigationController.stopFollowingScrollView()
         }
+        
+        //realm changes notification
+        self.setupRealmNotification()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.notificationToken?.stop()
     }
 
     override func didReceiveMemoryWarning() {

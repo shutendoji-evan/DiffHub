@@ -12,8 +12,8 @@ struct DiffHubConstants {
     
     static var githubAPI = "https://api.github.com"
     static var repos = "repos"
-    static var owner = "magicalpanda"
-    static var repositoryName = "MagicalRecord"
+    static var owner = "apple"
+    static var repositoryName = "swift"
     static var pulls = "pulls"
     
     static var pullsURL = DiffHubConstants.githubAPI + "/" + DiffHubConstants.repos + "/" + DiffHubConstants.owner + "/" + DiffHubConstants.repositoryName + "/" + DiffHubConstants.pulls
