@@ -13,7 +13,7 @@ import Foundation
 class DiffCodeLine {
     
     enum CodeLineType {
-        case plusOrMinor
+        case plusOrMinus
         case common
         case title
     }
